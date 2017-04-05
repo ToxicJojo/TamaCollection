@@ -1,0 +1,8 @@
+node_modules
+# We don't need these firebase files
+firebase-debug.log
+.firebaserc
+
+# Ignore the files that are produced by browserify and pug
+public/js
+public/*.html
