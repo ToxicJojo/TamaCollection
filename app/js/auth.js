@@ -20,6 +20,12 @@ function createNewAccount(username, email, password, errorCallback) {
   });
 }
 
+// Tries to sign in the user with the given email and password.
+// When the login fails, errorCallback is called..
+function signIn(email, password, errorCallback) {
+  firebase.auth().signInWithEmailAndPassword(email, password).catch(errorCallback);
+}
+
 // Checks if the given username is not yet in use.
 // Once the databse lookup resolves the callback function is called with
 // -true : The name is not used yet.
@@ -37,4 +43,5 @@ function isUsernameAvaiable(username, callback) {
 }
 
 exports.createNewAccount = createNewAccount;
+exports.signIn = signIn;
 exports.isUsernameAvaiable = isUsernameAvaiable;

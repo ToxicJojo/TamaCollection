@@ -1,0 +1,22 @@
+#modalSignIn.modal.fade(tabindex='-1', role='dialog')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') &times;
+        h4.modal-title Sign In
+      .modal-body
+        #signInAlert.alert.alert-danger.hidden(role='alert')
+          span#signInErrorMessage
+
+        form
+          .form-group
+            label.control-label(for='inputEmail') Email address
+            input#inputEmailSignIn.form-control(type='email' placeholder='Email')
+          .form-group
+            label.control-label(for='inputPassword') Password
+            input#inputPasswordSignIn.form-control(type='password' placeholder='Password')
+      .modal-footer
+        button.btn.btn-default(type='button', data-dismiss='modal') Close
+        |
+        button#buttonSignIn.btn.btn-primary(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Login

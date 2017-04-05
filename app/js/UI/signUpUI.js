@@ -3,12 +3,12 @@ var auth = require('../auth');
 
 
 function signupButtonClick() {
-  $('#buttonSignup').button('loading');
+  $('#buttonSignUp').button('loading');
 
   // Get the form values.
-  var username = $('#inputUsername').val();
-  var email = $('#inputEmail').val();
-  var password = $('#inputPassword').val();
+  var username = $('#inputUsernameSignUp').val();
+  var email = $('#inputEmailSignUp').val();
+  var password = $('#inputPasswordSignUp').val();
 
   // Indicates whether or not the inputs where successfully validated.
   // Will be set to false if one or more validations fail.
@@ -44,7 +44,7 @@ function signupButtonClick() {
     if(validationSuccess) {
       auth.createNewAccount(username, email, password, handleCreateNewAccountError);
     } else {
-      $('#buttonSignup').button('reset');
+      $('#buttonSignUp').button('reset');
     }
   });
 }
@@ -52,9 +52,9 @@ function signupButtonClick() {
 // Clears the modal from inputs and error messages.
 function clearModal() {
   // Clear the input fields.
-  $('#inputUsername').val('');
-  $('#inputEmail').val('');
-  $('#inputPassword').val('');
+  $('#inputUsernameSignUp').val('');
+  $('#inputEmailSignUp').val('');
+  $('#inputPasswordSignUp').val('');
   // Clear all error messages.
   clearInputError('Username');
   clearInputError('Email');
@@ -64,7 +64,7 @@ function clearModal() {
 // When the creation of a new account fails, this will be called to display the
 // error feedback to the user.
 function handleCreateNewAccountError(error) {
-  $('#buttonSignup').button('reset');
+  $('#buttonSignUp').button('reset');
 
   if(error.code === 'auth/email-already-in-use') {
     $('#helpBlockEmail').html(error.message);
@@ -88,7 +88,7 @@ function showInputError(group) {
 // It checks whether the usename in the field is avaiable and displays an error
 // to the user if the name is not avaiable.
 function inputUsernameChange() {
-  var username = $('#inputUsername').val();
+  var username = $('#inputUsernameSignUp').val();
 
   auth.isUsernameAvaiable(username, function(nameAvaiable) {
     if(!nameAvaiable) {
@@ -101,9 +101,9 @@ function inputUsernameChange() {
 
 
 function bindEvents() {
-  $('#buttonSignup').on('click', signupButtonClick);
-  $('#inputUsername').on('change', inputUsernameChange);
-  $('#modalSignup').on('hidden.bs.modal', clearModal);
+  $('#buttonSignUp').on('click', signupButtonClick);
+  $('#inputUsernameSignUp').on('change', inputUsernameChange);
+  $('#modalSignUp').on('hidden.bs.modal', clearModal);
 }
 
 
