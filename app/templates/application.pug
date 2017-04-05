@@ -1,0 +1,27 @@
+doctype html
+
+html
+  include shared/head.pug
+  body
+    include shared/signupModal.pug
+    include shared/header.pug
+
+    block content
+
+    include shared/footer.pug
+
+    // The firebase script we need on every page and the config for the project.
+    script(src='https://www.gstatic.com/firebasejs/3.7.4/firebase.js')
+    script.
+      // Initialize Firebase
+      var config = {
+      apiKey: "AIzaSyB5Iq13nWQmVCawRgNKepD2I-bcrfyk4EM",
+      authDomain: "tamacollection-ced9a.firebaseapp.com",
+      databaseURL: "https://tamacollection-ced9a.firebaseio.com",
+      projectId: "tamacollection-ced9a",
+      storageBucket: "tamacollection-ced9a.appspot.com",
+      messagingSenderId: "854845905554"
+      };
+      firebase.initializeApp(config);
+
+    block scripts
