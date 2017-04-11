@@ -1,6 +1,10 @@
 var commonUI = require('./commonUI');
+var auth = require('../auth');
 
 $(function() {
   commonUI.bindEvents();
-  commonUI.handleAuthState();
+
+  auth.addAuthStateListener(commonUI.authStateListener);
+
+  auth.registerAuthStateListeners();
 });

@@ -1,0 +1,43 @@
+extends ../application.pug
+
+block content
+  .container-fluid
+    .row
+      .col-md-3
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Settings
+          .panel-body
+            ul.nav.nav-pills.nav-stacked
+              li.active(role='presentation')
+                a(href='#') Profile
+              li(role='presentation')
+                a(href='#') Account
+      #profileTab
+        .col-md-6#profileCol
+          h2 Profile
+          hr
+          #updateProfileAlert.alert.alert-success.hidden(role='alert')
+            span#updateProfileErrorMessage Profile updated.
+          form
+            .form-group#formGroupSettingsUsername
+              label(for='inputUsernameSettings') Username
+              input#inputUsernameSettings.form-control
+              span#helpBlockSettingsUsername.help-block.hidden This username is already taken.
+            .form-group#formGroupSettingsBio
+              label(for='textareaBioSettings') Bio
+              textarea#textareaBioSettings.form-control(rows='3')
+              span#helpBlockSettingsBio.help-block.hidden Your bio may only be 300 characters long.
+            .form-group
+              button#buttonUpdateProfile.btn.btn-default(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Profile
+        .col-md-3
+          label Profile Picture
+          img.img-responsive(src='/img/profile_pic.png')
+          center
+            button.btn.btn-default Upload Picture
+      #accountTab.hidden
+        .col-md-9
+          h2 Account
+
+block append scripts
+  script(src='/js/settingsUI.js')

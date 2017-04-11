@@ -1,24 +1,30 @@
 nav.navbar.navbar-default
   .container-fluid
     .navbar-header
-      a.navbar-brand(href='#') TammaCollection
+      a.navbar-brand(href='/') TamaCollection
+    ul.nav.navbar-nav
+      li
+        a(href='/tamagotchis') Tamagotchis
 
     ul.nav.navbar-nav.navbar-right
-      li
+      li#headerSignIn
         a(href='#' data-toggle='modal' data-target='#modalSignIn') Sign In
-      li
+      li#headerSignUp
         a(href='#' data-toggle='modal' data-target='#modalSignUp') Sign Up
-      li.dropdown.hidden
+      li#headerUserInfo.dropdown.hidden
         a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-          | Dropdown
+          span#headerUserName
+          | &nbsp;
+          img.img-responsive.header-avatar(src='/img/profile_pic.png')
+
           span.caret
         ul.dropdown-menu
           li
-            a(href='#') Action
+            a(href='#') Profile
           li
-            a(href='#') Another action
-          li
-            a(href='#') Something else here
+            a(href='/settings') Settings
           li.divider(role='separator')
           li
-            a(href='#') Separated link
+            a#headerSignOut(href='#')
+              | Sign Out &nbsp;
+              i.fa.fa-sign-out

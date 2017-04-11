@@ -1,0 +1,32 @@
+{
+  "rules": {
+		"usernames": {
+      ".read": true,
+      ".write": false
+    },
+    "users": {
+      "$uid": {
+        ".read": true,
+        ".write": "auth.uid === $uid",
+        "username": {
+          ".validate": "!root.child('usernames').child(newData.val()).exists() || root.child('usernames').child(newData.val()).val() == $uid"
+        }
+      }
+    },
+    "versions": {
+      ".read": true
+    },
+    "releases": {
+      ".read": true
+    },
+    "shells": {
+      ".read": true
+    },
+    "collections":  {
+      ".read": true,
+        "$uid": {
+          ".write": "auth.uid === $uid"
+        }
+    }
+  }
+}

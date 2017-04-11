@@ -1,0 +1,93 @@
+extends ../application.pug
+
+block content
+  .container-fluid
+    .row
+      .col-md-2
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Version
+          .panel-body
+            ul#versionNav.nav.nav-pills.nav-stacked
+
+
+      .col-md-7
+        .row
+          .col-md-12
+            .panel.panel-default
+              .panel-body
+                .row
+                  .col-md-5
+                    .row
+                      .col-md-12
+                        .thumbnail
+                          img#shellImage(src='/img/sampleShell.jpg')
+                    .row
+                      .col-md-12
+                        h4 Collection Status
+                        hr
+                        form
+                          .form-group
+                            button.form-control.btn.btn-success
+                              | Add to Collection &nbsp;
+                              i.fa.fa-book
+                          .form-group
+                            button.form-control.btn.btn-primary
+                              | Add to Wanted &nbsp;
+                              i.fa.fa-bookmark
+                          .form-group
+                            button.form-control.btn.btn-warning
+                              | Add to favourites &nbsp;
+                              i.fa.fa-star
+
+                  .col-md-7
+                    #versionInfo
+                      h4 Version Info
+                      hr
+                      dl.dl-horizontal
+                        dt Name:
+                        dd#versionInfoName Tamagotchi m!x
+                        dt Description:
+                        dd#versionInfoDescription The Tamagotchi m!x is so named because the focus this time around is on the creation of new character attribute combinations based on the parents. There are four versions: Melody, Spacey, 20th Anniversary, and Sanrio, each with exclusive characters.
+                        dt Shorthand:
+                        dd#versionInfoShorthand m!x
+                    #releaseInfo.hidden
+                      h4 Release Info
+                      hr
+                      dl.dl-horizontal
+                        dt Release Name:
+                        dd#releaseInfoName Anniversary
+                        dt Release Date:
+                        dd#releaseInfoDate 20.08.2016
+                        dt Price:
+                        dd#releaseInfoPrice 4500‎¥
+                    #shellInfo.hidden
+                      h4 Shell Info
+                      hr
+                      dl.dl-horizontal
+                        dt Color:
+                        dd#shellInfoColor Pink
+        .row
+          .col-md-12
+            .panel.panel-default
+              .panel-body
+                | Comments
+
+
+      .col-md-3
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Releases
+          .panel-body
+            ul#releaseNav.nav.nav-tabs(role='tablist')
+              li.active(role='presentation')
+                a(href='#original', aria-controls='home', role='tab', data-toggle='tab') Original
+              li(role='presentation')
+                a(href='#anniversary', aria-controls='profile', role='tab', data-toggle='tab') Anniversary
+            #releaseContent.tab-content
+              #original.tab-pane.active(role='tabpanel') Original
+              #anniversary.tab-pane(role='tabpanel') Anniversary
+
+
+block append scripts
+  script(src='/js/tamagotchisUI.js')

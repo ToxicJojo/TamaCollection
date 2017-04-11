@@ -26,6 +26,10 @@ function signIn(email, password, errorCallback) {
   firebase.auth().signInWithEmailAndPassword(email, password).catch(errorCallback);
 }
 
+function signOut() {
+  firebase.auth().signOut();
+}
+
 // Checks if the given username is not yet in use.
 // Once the databse lookup resolves the callback function is called with
 // -true : The name is not used yet.
@@ -42,6 +46,25 @@ function isUsernameAvaiable(username, callback) {
   });
 }
 
+// This holds a colection of functions that listen for the authentication state
+var authStateListeners = [];
+
+function addAuthStateListener(authStateListener) {
+  authStateListeners.push(authStateListener);
+}
+
+function registerAuthStateListeners() {
+  firebase.auth().onAuthStateChanged(function(user) {
+    // Loop through all registerd listeners and invoke them.
+    for(var i = 0; i < authStateListeners.length; i++) {
+      authStateListeners[i](user);
+    }
+  });
+}
+
 exports.createNewAccount = createNewAccount;
 exports.signIn = signIn;
+exports.signOut = signOut;
 exports.isUsernameAvaiable = isUsernameAvaiable;
+exports.addAuthStateListener = addAuthStateListener;
+exports.registerAuthStateListeners = registerAuthStateListeners;

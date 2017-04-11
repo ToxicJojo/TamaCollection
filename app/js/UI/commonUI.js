@@ -5,20 +5,13 @@ var headerUI = require('./headerUI');
 function bindEvents() {
   signUpUI.bindEvents();
   signInUI.bindEvents();
+  headerUI.bindEvents();
 }
 
-function handleAuthState() {
-  firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    // Hide the sign in modal after successfull login.
-    $('#modalSignIn').modal('hide')
-    headerUI.showUser(user);
-  } else {
-
-  }
-});
+function authStateListener(user) {
+  headerUI.authStateListener(user);
 }
 
 
 exports.bindEvents = bindEvents;
-exports.handleAuthState = handleAuthState;
+exports.authStateListener = authStateListener;

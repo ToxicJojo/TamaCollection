@@ -37,8 +37,11 @@ function hideSignInError() {
 }
 
 function clearSignInModal() {
+  $('#buttonSignIn').button('reset');
+
   $('#inputEmailSignIn').val('');
   $('#inputPasswordSignIn').val('');
+  
 
   hideSignInError();
 }
@@ -47,6 +50,9 @@ function clearSignInModal() {
 function bindEvents() {
   $('#buttonSignIn').on('click', signInUser);
   $('#modalSignIn').on('hidden.bs.modal', clearSignInModal);
+  $('#modalSignIn').on('shown.bs.modal', function() {
+    $('#inputEmailSignIn').focus();
+  });
 }
 
 exports.bindEvents = bindEvents;
