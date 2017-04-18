@@ -23,22 +23,32 @@ block content
                         .thumbnail
                           img#shellImage(src='/img/sampleShell.jpg')
                     .row
-                      .col-md-12
+                      #collectionStatus.col-md-12.hidden
                         h4 Collection Status
                         hr
                         form
                           .form-group
-                            button.form-control.btn.btn-success
+                            button#buttonAddToCollected.form-control.btn.btn-success(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
                               | Add to Collection &nbsp;
                               i.fa.fa-book
+
+                            button#buttonRemoveFromCollected.form-control.btn.btn-danger.hidden(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
+                              | Remove from Collection &nbsp;
+                              i.fa.fa-cross
                           .form-group
-                            button.form-control.btn.btn-primary
+                            button#buttonAddToWanted.form-control.btn.btn-info
                               | Add to Wanted &nbsp;
                               i.fa.fa-bookmark
+                            button#buttonRemoveFromWanted.form-control.btn.btn-danger.hidden
+                              | Remove from Wanted &nbsp;
+                              i.fa.fa-bookmark-o
                           .form-group
-                            button.form-control.btn.btn-warning
-                              | Add to favourites &nbsp;
+                            button#buttonAddToFavorite.form-control.btn.btn-warning
+                              | Add to Favorites &nbsp;
                               i.fa.fa-star
+                            button#buttonRemoveFromFavorite.form-control.btn.btn-warning.hidden
+                              | Remove from Favorites &nbsp;
+                              i.fa.fa-star-o
 
                   .col-md-7
                     #versionInfo
@@ -80,14 +90,8 @@ block content
             h3.panel-title Releases
           .panel-body
             ul#releaseNav.nav.nav-tabs(role='tablist')
-              li.active(role='presentation')
-                a(href='#original', aria-controls='home', role='tab', data-toggle='tab') Original
-              li(role='presentation')
-                a(href='#anniversary', aria-controls='profile', role='tab', data-toggle='tab') Anniversary
             #releaseContent.tab-content
-              #original.tab-pane.active(role='tabpanel') Original
-              #anniversary.tab-pane(role='tabpanel') Anniversary
-
+              
 
 block append scripts
   script(src='/js/tamagotchisUI.js')

@@ -12,6 +12,19 @@ function authStateListener(user) {
   headerUI.authStateListener(user);
 }
 
+function showLoadingSpinner(jquerySelector) {
+  $(jquerySelector).LoadingOverlay('show', {
+    image: "",
+    fontawesome: 'fa fa-spinner fa-spin'
+  });
+}
+
+function hideLoadingSpinner(jquerySelector) {
+  $(jquerySelector).LoadingOverlay('hide');
+}
 
 exports.bindEvents = bindEvents;
 exports.authStateListener = authStateListener;
+
+exports.showLoadingSpinner = showLoadingSpinner;
+exports.hideLoadingSpinner = hideLoadingSpinner;

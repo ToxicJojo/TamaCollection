@@ -2,12 +2,14 @@ var commonUI = require('./commonUI');
 var auth = require('../auth');
 var tamagotchi = require('../tamagotchi');
 var util = require('../util');
+var collection = require('../collection');
 
 $(function() {
   commonUI.bindEvents();
   bindEvents();
 
   auth.addAuthStateListener(commonUI.authStateListener);
+  auth.addAuthStateListener(authStateListener);
 
   auth.registerAuthStateListeners();
 
@@ -57,10 +59,7 @@ function getCurrentShell() {
 
 
 function loadVersions() {
-  $('#versionNav').LoadingOverlay('show', {
-    image: "",
-    fontawesome: 'fa fa-spinner fa-spin'
-  });
+  commonUI.showLoadingSpinner('#versionNav');
 
   tamagotchi.getVersions(function(versionSnapshot) {
     versions = versionSnapshot.val();
@@ -140,6 +139,8 @@ function handleLocationChange() {
       if(shellId && getOldShellId() !== shellId) {
         handleShellChange();
         oldPath[4] = shellId;
+      } else {
+        hideShell();
       }
     }
   }
@@ -165,10 +166,7 @@ function handleVersionChange() {
 var releases;
 
 function loadReleases(versionId) {
-  $('#releaseNav').LoadingOverlay('show', {
-    image: "",
-    fontawesome: 'fa fa-spinner fa-spin'
-  });
+  commonUI.showLoadingSpinner('#releaseNav');
 
   tamagotchi.getReleases(versionId, function(releaseSnapshot) {
     releases = releaseSnapshot.val();
@@ -249,10 +247,7 @@ function getReleaseContentTemplate(releaseId) {
 var shells;
 
 function loadShells(releaseId) {
-  $('#releaseContent').LoadingOverlay('show', {
-    image: "",
-    fontawesome: 'fa fa-spinner fa-spin'
-  });
+  commonUI.showLoadingSpinner('#releaseContent');
 
   tamagotchi.getShells(releaseId, function(shellsSnapshot) {
     shells = shellsSnapshot.val();
@@ -277,6 +272,10 @@ function showShells() {
 
   $('#releaseContent').LoadingOverlay('hide');
 
+  if(firebase.auth().currentUser) {
+    showThumbnailCollectionStatus();
+  }
+
   $('.shellThumbnail').on('click', shellThumbnailClickHandler);
 }
 
@@ -297,10 +296,19 @@ function showShell(shell) {
   $('#shellImage').attr('src', shell.img);
   $('#shellInfoColor').html(shell.color);
   $('#shellInfo').toggleClass('hidden', false);
+
+  // If the user is logged in show the collectionButtons
+  if(firebase.auth().currentUser) {
+    showCollectionStatus();
+    $('#collectionStatus').toggleClass('hidden', false);
+  } else {
+    $('#collectionStatus').toggleClass('hidden', true);
+  }
 }
 
 function hideShell() {
   $('#shellInfo').toggleClass('hidden', true);
+  $('#collectionStatus').toggleClass('hidden', true);
 }
 
 
@@ -308,14 +316,168 @@ function getShellTemplate(shellId, shell) {
   var html = '<div class="col-md-4">';
   html += '<a href="#" class="thumbnail shellThumbnail" id="shell' + shellId + '" data-shellid="' + shellId + '">';
   html += '<img src="' + shell.thumbnail + '">';
+  html += '<span id="labelCollected' + shellId + '" class="label label-success thumbnail-label invisible"><i class="fa fa-book fa-lg"></i></span>';
+  html += '<span id="labelWanted' + shellId + '" class="label label-info thumbnail-label invisible"><i class="fa fa-bookmark fa-lg"></i></span>';
+  html += '<span id="labelFavorite' + shellId + '" class="label label-warning thumbnail-label invisible"><i class="fa fa-star fa-lg"></i></span>';
   html += '</a></div>';
 
   return html;
 }
 
+var userCollection = {};
+
+
+function addCurrentShellTo(group) {
+  $('#buttonAddTo' + group.toUpperCase()).button('loading');
+
+  var versionId = getCurrentVersionId();
+  var releaseId = getCurrentReleaseId();
+  var shellId = getCurrentShellId();
+
+  collection.addTo(group, versionId, releaseId, shellId, function() {
+    $('#buttonAddTo' + group.toUpperCase()).button('reset');
+  });
+}
+
+function removeCurrentShellFrom(group) {
+  $('#buttonRemoveFrom' + group.toUpperCase()).button('loading');
+
+  var versionId = getCurrentVersionId();
+  var releaseId = getCurrentReleaseId();
+  var shellId = getCurrentShellId();
+
+  collection.removeFrom(group, versionId, releaseId, shellId, function() {
+    $('#buttonRemoveFrom' + group.toUpperCase()).button('reset');
+  });
+}
+
+
+function addToCollectionClickHandler(e) {
+  e.preventDefault();
+
+  addCurrentShellTo('collected');
+}
+
+function removeFromCollectionClickHandler(e) {
+  e.preventDefault();
+
+  removeCurrentShellFrom('collected');
+}
+
+function addToWantedClickHandler(e) {
+  e.preventDefault();
+
+  addCurrentShellTo('wanted');
+}
+
+function removeFromWantedClickHandler(e) {
+  e.preventDefault();
+
+  removeCurrentShellFrom('wanted');
+}
+
+function addToFavoriteClickHandler(e) {
+  e.preventDefault();
+
+  addCurrentShellTo('favorite');
+}
+
+function removeFromFavoriteClickHandler(e) {
+  e.preventDefault();
+
+  removeCurrentShellFrom('favorite');
+}
+
+
+function showThumbnailCollectionStatus() {
+  var versionId = getCurrentVersionId();
+  var releaseId = getCurrentReleaseId();
+
+  $('.thumbnail-label').toggleClass('invisible', true);
+
+  if(userCollection[versionId]) {
+
+    var collectionShells = userCollection[versionId][releaseId];
+
+    util.cycleObjectProperties(collectionShells, function(shellId, shell) {
+      if(collection.isItemInCollection(userCollection, versionId, releaseId, shellId)) {
+        $('#labelCollected' + shellId).toggleClass('invisible', false);
+      }
+
+      if(collection.isItemInWanted(userCollection, versionId, releaseId, shellId)) {
+        $('#labelWanted' + shellId).toggleClass('invisible', false);
+      }
+
+      if(collection.isItemInFavorite(userCollection, versionId, releaseId, shellId)) {
+        $('#labelFavorite' + shellId).toggleClass('invisible', false);
+      }
+    });
+
+  }
+}
+
+function showCollectionStatus() {
+  var versionId = getCurrentVersionId();
+  var releaseId = getCurrentReleaseId();
+  var shellId = getCurrentShellId();
+
+  if(collection.isItemInCollection(userCollection, versionId, releaseId, shellId)) {
+    $('#buttonAddToCollected').toggleClass('hidden', true);
+    $('#buttonRemoveFromCollected').toggleClass('hidden', false);
+    $('#buttonAddToWanted').toggleClass('hidden', true);
+    $('#buttonRemoveFromWanted').toggleClass('hidden', true);
+  } else {
+    $('#buttonAddToCollected').toggleClass('hidden', false);
+    $('#buttonRemoveFromCollected').toggleClass('hidden', true);
+
+    if(collection.isItemInWanted(userCollection, versionId, releaseId, shellId)) {
+      $('#buttonAddToWanted').toggleClass('hidden', true);
+      $('#buttonRemoveFromWanted').toggleClass('hidden', false);
+    } else {
+      $('#buttonAddToWanted').toggleClass('hidden', false);
+      $('#buttonRemoveFromWanted').toggleClass('hidden', true);
+    }
+  }
+
+  if(collection.isItemInFavorite(userCollection, versionId, releaseId, shellId)) {
+    $('#buttonAddToFavorite').toggleClass('hidden', true);
+    $('#buttonRemoveFromFavorite').toggleClass('hidden', false);
+  } else {
+    $('#buttonAddToFavorite').toggleClass('hidden', false);
+    $('#buttonRemoveFromFavorite').toggleClass('hidden', true);
+  }
+
+}
+
+function collectionListener(collectionSnapshot) {
+  userCollection = collectionSnapshot.val();
+
+  // If the user has no items in his collection set it to an empty object to
+  // avoid null exceptions.
+  if(!userCollection) {
+    userCollection = {};
+  }
+  
+  showThumbnailCollectionStatus();
+  showCollectionStatus();
+}
+
+function authStateListener(user) {
+  if(user) {
+    collection.listenOnCollection(collectionListener);
+  } else {
+
+  }
+}
 
 
 
 function bindEvents() {
   window.onpopstate = handleLocationChange;
+  $('#buttonAddToCollected').on('click', addToCollectionClickHandler);
+  $('#buttonRemoveFromCollected').on('click', removeFromCollectionClickHandler);
+  $('#buttonAddToWanted').on('click', addToWantedClickHandler);
+  $('#buttonRemoveFromWanted').on('click', removeFromWantedClickHandler);
+  $('#buttonAddToFavorite').on('click', addToFavoriteClickHandler);
+  $('#buttonRemoveFromFavorite').on('click', removeFromFavoriteClickHandler);
 }
