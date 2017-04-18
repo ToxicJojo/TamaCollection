@@ -1,0 +1,45 @@
+extends ../../application.pug
+
+block content
+  .container-fluid
+    .row
+      .col-md-2
+
+      .col-md-8
+        #editVersionPanel.panel.panel-default
+          .panel-heading
+            .row
+              .col-md-6
+                select#selectVersion.form-control
+
+              .col-md-6
+                button#buttonAddVersion.btn.btn-success(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
+                  | Add new Version &nbsp;
+                  i.fa.fa-plus
+                | &nbsp;
+                button#buttonDeleteVersion.btn.btn-danger(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
+                  | Delete Version &nbsp;
+                  i.fa.fa-trash
+
+          .panel-body
+            form
+              .form-group
+                label(for='inputVersionName') Version Name:
+                input#inputVersionName.form-control(type='text')
+              .form-group
+                label(for='inputDescription') Description:
+                textarea#inputDescription.form-control(rows='3')
+              .form-group
+                label(for='inputShorthand') Version Shorthand:
+                input#inputShorthand.form-control(type='text')
+              .form-group
+                button#buttonUpdateVersion.btn.btn-primary(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Version
+
+
+
+
+
+      .col-md-2
+
+block append scripts
+  script(src='/js/manageVersionsUI.js')

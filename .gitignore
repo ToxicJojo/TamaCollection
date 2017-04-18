@@ -5,4 +5,4 @@ firebase-debug.log
 
 # Ignore the files that are produced by browserify and pug
 public/js
-public/*.html
+public/**/*.html
