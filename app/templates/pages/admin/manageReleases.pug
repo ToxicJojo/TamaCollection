@@ -7,17 +7,17 @@ block content
       .col-md-3
 
       .col-md-6
-        .panel.panel-default
+        #editReleasePanel.panel.panel-default
           .panel-heading
             .row
               .col-md-4
                 select.form-control#selectVersion
               .col-md-2
-                button.btn.btn-success(type='button') Add Release
+                button#buttonAddRelease.btn.btn-success(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Add Release
               .col-md-4
                 select.form-control#selectRelease
               .col-md-1
-                button.btn.btn-danger(type='button') Delete Release
+                button#buttonDeleteRelease.btn.btn-danger(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Delete Release
           .panel-body
             form
               .form-group
@@ -29,7 +29,7 @@ block content
               .form-group
                 label(for='inputReleasePrice') Price:
                 input#inputReleasePrice.form-control(type='text')
-              button.btn.btn-primary(type='button') Update Release
+              button#buttonUpdateRelease.btn.btn-primary(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Release
 
 block append scripts
   script(src='/js/manageReleasesUI.js')
