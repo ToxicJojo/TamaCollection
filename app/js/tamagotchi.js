@@ -32,6 +32,12 @@ function listenOnReleases(versionId, releasesListener) {
   database.ref('/releases/' + versionId).on('value', releasesListener);
 }
 
+function listenOnShells(releaseId, shellsListener) {
+  var database = firebase.database();
+
+  database.ref('/shells/' + releaseId).on('value', shellsListener);
+}
+
 
 // Update Functions
 
@@ -54,6 +60,18 @@ function updateRelease(versionId, releaseId, release, successCallback) {
   updates['/releases/' + versionId + '/' + releaseId] = release;
 
   database.ref().update(updates)
+    .then(successCallback);
+}
+
+function updateShell(releaseId, shellId, shell, successCallback) {
+  var database = firebase.database();
+
+  var updates = {};
+
+  //updates['/shells/' + releaseId + '/' + shellId] = shell;
+
+  database.ref('/shells/' + releaseId + '/' + shellId).update(shell)
+  //database.ref().update(updates)
     .then(successCallback);
 }
 
@@ -83,6 +101,18 @@ function addRelease(versionId, successCallback) {
   }).then(successCallback);
 }
 
+function addShell(releaseId, successCallback) {
+  var database = firebase.database();
+
+  var newShellRef = database.ref('/shells/' + releaseId).push();
+
+  newShellRef.set({
+    color: 'New Color',
+    img: '/img/sampleShell.jpg',
+    thumbnail: '/img/sampleShell.jpg'
+  }).then(successCallback);
+}
+
 // Delete Functions
 
 function deleteVersion(versionId, successCallback) {
@@ -98,18 +128,29 @@ function deleteRelease(versionId, releaseId, successCallback) {
     .then(successCallback);
 }
 
+function deleteShell(releaseId, shellId, successCallback) {
+  var database = firebase.database();
+
+  database.ref('/shells/' + releaseId + '/' + shellId).remove()
+    .then(successCallback);
+}
+
 exports.getVersions = getVersions;
 exports.getReleases = getReleases
 exports.getShells = getShells;
 
 exports.listenOnVerions = listenOnVerions;
 exports.listenOnReleases = listenOnReleases;
+exports.listenOnShells = listenOnShells;
 
 exports.updateVersion = updateVersion;
 exports.updateRelease = updateRelease;
+exports.updateShell = updateShell;
 
 exports.addVersion = addVersion;
 exports.addRelease = addRelease;
+exports.addShell = addShell;
 
 exports.deleteVersion = deleteVersion;
 exports.deleteRelease = deleteRelease;
+exports.deleteShell = deleteShell;

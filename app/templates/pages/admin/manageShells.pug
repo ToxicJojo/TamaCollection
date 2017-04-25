@@ -1,0 +1,38 @@
+extends ../../application
+
+block content
+
+  .container-fluid
+    .row
+      .col-md-3
+
+      .col-md-6
+        #editShellPanel.panel.panel-default
+          .panel-heading
+            .row
+              .col-md-4
+                select.form-control#selectVersion
+              .col-md-2
+                select.form-control#selectRelease
+              .col-md-2
+                select.form-control#selectShell
+              .col-md-2
+                button#buttonAddShell.btn.btn-success(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Add Shell
+              .col-md-1
+                button#buttonDeleteShell.btn.btn-danger(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Delete Shell
+          .panel-body
+            form
+              .row
+                .col-md-7
+                  .form-group
+                    label(for='inputShellColor') Color:
+                    input#inputShellColor.form-control(type='text')
+                  .form-group
+                    label(for='inputShellImageFile') Date:
+                    input#inputShellImageFile(type='file')
+                .col-md-4
+                  img#shellImage.img-responsive(src='/img/sampleShell.jpg')
+              button#buttonUpdateShell.btn.btn-primary(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Shell
+
+block append scripts
+  script(src='/js/manageShellsUI.js')
