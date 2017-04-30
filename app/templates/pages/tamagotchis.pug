@@ -91,7 +91,11 @@ block content
           .panel-body
             ul#releaseNav.nav.nav-tabs(role='tablist')
             #releaseContent.tab-content
-              
+
 
 block append scripts
+  script(src='/js/templates/versionList.js')
+  script(src='/js/templates/releaseTab.js')
+  script(src='/js/templates/releaseTabContent.js')
+  script(src='/js/templates/shellThumbnail.js')
   script(src='/js/tamagotchisUI.js')

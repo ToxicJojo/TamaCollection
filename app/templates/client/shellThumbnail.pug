@@ -1,0 +1,9 @@
+.col-md-4
+  a.thumbnail.shellThumbnail(href='#' id='shell' + shell.id data-shellid=shell.id)
+    img(src=shell.thumbnail)
+    span.label.label-success.thumbnail-label.invisible(id='labelCollected' + shell.id)
+      i.fa.fa-book.fa-lg
+    span.label.label-info.thumbnail-label.invisible(id='labelWanted' + shell.id)
+      i.fa.fa-bookmark.fa-lg
+    span.label.label-warning.thumbnail-label.invisible(id='labelFavorite' + shell.id)
+      i.fa.fa-star.fa-lg

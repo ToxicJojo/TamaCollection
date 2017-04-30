@@ -16,10 +16,14 @@ $(function() {
   loadVersions();
 });
 
-var versions = [];
+ // Functions to read values from the current url.
+ // The versionId, releaseId and shellId are saved in the url to allow users
+ // to send links that directily display a version/release/shell.
 
+// Version
 
 function getCurrentVersionId() {
+  // The path looks like /tamagotchis/$versionId
   var path = window.location.pathname.split('/');
 
   return path[2];
@@ -29,52 +33,121 @@ function getCurrentVersion() {
   return versions[getCurrentVersionId()];
 }
 
+function getOldVersionId() {
+  return oldPath[2];
+}
+
+// Release
+
 function getCurrentReleaseId() {
+  // The path looks like /tamagotchis/$versionId/$releaseId
   var path = window.location.pathname.split('/');
 
   return path[3];
-}
-
-function getOldReleaseId() {
-  return oldPath[3];
 }
 
 function getCurrentRelease() {
   return releases[getCurrentReleaseId()];
 }
 
+function getOldReleaseId() {
+  return oldPath[3];
+}
+
+// Shell
+
 function getCurrentShellId() {
+  // The path looks like /tamagotchis/$versionId/$releaseId/$shellId
   var path = window.location.pathname.split('/');
 
   return path[4];
-}
-
-function getOldShellId() {
-  return oldPath[4];
 }
 
 function getCurrentShell() {
   return shells[getCurrentShellId()];
 }
 
+function getOldShellId() {
+  return oldPath[4];
+}
 
+
+// The default path.
+var oldPath = ['', 'tamagotchis'];
+
+
+// Is called whenever the url changes.
+// Detects which parts of the url changed
+// and loads the appropiated version/release/shell.
+// The url looks like /tamagotchis/$versionId/$releaseId/$shellId
+function handleLocationChange() {
+  var location = window.location;
+
+  var versionId = getCurrentVersionId();
+
+  // Check if a versionId is present and if it changed.
+  if(versionId && (getOldVersionId() !== versionId)) {
+    handleVersionChange();
+    // Save the oldPath. We can reset the versionId ([3]) and shellId ([4])
+    // because a versions change means the release/shell changed aswell or are
+    // not present.
+    oldPath[2] = versionId;
+    oldPath[3] = '';
+    oldPath[4] = '';
+  } else {
+    var releaseId = getCurrentReleaseId();
+    // Check if a releaseId is present and if it changed
+    if(releaseId && getOldReleaseId() !== releaseId) {
+        handleReleaseChange();
+        // Save the oldPath. We can reset the shellId ([4])
+        // because a versions change means the shell changed aswell or is
+        // not present.
+        oldPath[3] = releaseId;
+        oldPath[4] = '';
+    } else {
+      var shellId = getCurrentShellId();
+      // Check if a shellId is present and if it changed
+      if(shellId && getOldShellId() !== shellId) {
+        handleShellChange();
+        oldPath[4] = shellId;
+      } else {
+        hideShell();
+      }
+    }
+  }
+}
+
+
+var versions = {};
+
+// Gets a snapshot of the versions from the database and saves it in 'versions'.
 function loadVersions() {
   commonUI.showLoadingSpinner('#versionNav');
 
   tamagotchi.getVersions(function(versionSnapshot) {
     versions = versionSnapshot.val();
     showVersions();
+    // After loading the versions check the url
+    // if we need to display a specific version.
     handleLocationChange();
   });
 }
 
+// Shows the list of versions in the righthand menue.
 function showVersions() {
   var versionNav = $('#versionNav');
 
+  // Reset the old versionlist.
   versionNav.html('');
 
   util.cycleObjectProperties(versions, function(versionId, version) {
-    versionNav.append(getVersionNavTemplate(versionId, version));
+    version.id = versionId;
+
+    var templateData = {
+      version: version
+    };
+
+    versionNav.append(versionlistTemplate(templateData));
   });
 
   versionNav.LoadingOverlay('hide');
@@ -95,59 +168,11 @@ function versionNavClickHandler(e) {
   e.preventDefault();
 
   var versionId = $(this).data().versionid;
-  var version = versions[versionId];
-
 
   history.pushState({}, '', '/tamagotchis/' + versionId);
-  console.log(version);
-  //handleVersionChange(versionId);
+
   handleLocationChange();
 }
-
-
-function getVersionNavTemplate(versionId, version) {
-  var html = '<li role="presentation"  data-versionid="' + versionId + '" id="versionNav' + versionId + '" class="version-nav-li">';
-  html += '<a href="#">' + version.shorthand + "</a>"
-
-  return html;
-}
-
-var oldPath = ['', 'tamagotchis'];
-
-function handleLocationChange() {
-  var location = window.location;
-
-  var path = location.pathname.split('/');
-  var versionId = path[2];
-
-
-  if(versionId && oldPath[2] !== versionId) {
-    handleVersionChange();
-    oldPath[2] = versionId;
-    oldPath[3] = '';
-    oldPath[4] = '';
-  } else {
-    var releaseId = getCurrentReleaseId();
-
-    if(releaseId && getOldReleaseId() !== releaseId) {
-        handleReleaseChange();
-        oldPath[3] = releaseId;
-        oldPath[4] = '';
-    } else {
-      var shellId = getCurrentShellId();
-
-      if(shellId && getOldShellId() !== shellId) {
-        handleShellChange();
-        oldPath[4] = shellId;
-      } else {
-        hideShell();
-      }
-    }
-  }
-
-  //oldPath = path;
-}
-
 
 
 function handleVersionChange() {
@@ -162,7 +187,6 @@ function handleVersionChange() {
 
 
 
-
 var releases;
 
 function loadReleases(versionId) {
@@ -171,6 +195,7 @@ function loadReleases(versionId) {
   tamagotchi.getReleases(versionId, function(releaseSnapshot) {
     releases = releaseSnapshot.val();
     showReleases();
+
     handleLocationChange();
   });
 }
@@ -183,8 +208,14 @@ function showReleases() {
   releaseContent.html('');
 
   util.cycleObjectProperties(releases, function(releaseId, release) {
-    releaseNav.append(getReleaseTabTemplate(releaseId, release));
-    releaseContent.append(getReleaseContentTemplate(releaseId));
+    release.id = releaseId;
+
+    var templateData = {
+      release: release
+    };
+
+    releaseNav.append(releasetabTemplate(templateData));
+    releaseContent.append(releasetabcontentTemplate(templateData));
   });
 
   releaseNav.LoadingOverlay('hide');
@@ -229,20 +260,6 @@ function releaseNavClickHandler(e) {
 }
 
 
-function getReleaseTabTemplate(releaseId, release) {
-  var html = '<li role="presentation" class="tab" id="releaseNav' + releaseId + '" data-releaseId="' + releaseId + '">';
-  html += '<a href="#">' + release.name;
-  html += '</a></li>';
-
-  return html;
-}
-
-function getReleaseContentTemplate(releaseId) {
-  var html = '<div class="hidden release-content" id="releaseContent' + releaseId + '">'
-  html += '</div>';
-
-  return html;
-}
 
 var shells;
 
@@ -264,7 +281,13 @@ function showShells() {
   var html = '<div class="row">'
 
   util.cycleObjectProperties(shells, function(shellId, shell) {
-    html += (getShellTemplate(shellId, shell));
+    shell.id = shellId;
+
+    var templateData = {
+      shell: shell
+    };
+
+    html += (shellthumbnailTemplate(templateData));
   });
 
   html += '</div>';
@@ -312,20 +335,7 @@ function hideShell() {
 }
 
 
-function getShellTemplate(shellId, shell) {
-  var html = '<div class="col-md-4">';
-  html += '<a href="#" class="thumbnail shellThumbnail" id="shell' + shellId + '" data-shellid="' + shellId + '">';
-  html += '<img src="' + shell.thumbnail + '">';
-  html += '<span id="labelCollected' + shellId + '" class="label label-success thumbnail-label invisible"><i class="fa fa-book fa-lg"></i></span>';
-  html += '<span id="labelWanted' + shellId + '" class="label label-info thumbnail-label invisible"><i class="fa fa-bookmark fa-lg"></i></span>';
-  html += '<span id="labelFavorite' + shellId + '" class="label label-warning thumbnail-label invisible"><i class="fa fa-star fa-lg"></i></span>';
-  html += '</a></div>';
-
-  return html;
-}
-
 var userCollection = {};
-
 
 function addCurrentShellTo(group) {
   $('#buttonAddTo' + group.toUpperCase()).button('loading');
@@ -451,13 +461,12 @@ function showCollectionStatus() {
 
 function collectionListener(collectionSnapshot) {
   userCollection = collectionSnapshot.val();
-
   // If the user has no items in his collection set it to an empty object to
   // avoid null exceptions.
   if(!userCollection) {
     userCollection = {};
   }
-  
+
   showThumbnailCollectionStatus();
   showCollectionStatus();
 }
@@ -465,11 +474,8 @@ function collectionListener(collectionSnapshot) {
 function authStateListener(user) {
   if(user) {
     collection.listenOnCollection(collectionListener);
-  } else {
-
   }
 }
-
 
 
 function bindEvents() {
