@@ -1,6 +1,4 @@
 const functions = require('firebase-functions');
-const gcs = require('@google-cloud/storage')();
-const spawn = require('child-process-promise').spawn;
 const admin = require('firebase-admin');
 
 

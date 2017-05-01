@@ -19,7 +19,7 @@ function handleSignInError(error) {
   $('#buttonSignIn').button('reset');
 
   // Check if the account is disabled otherwise the email/password combination
-  // was wrong.
+  // is wrong.
   if(error.code === "auth/user-disabled") {
     showSignInError(USER_DISABLED_ERROR_MESSAGE);
   } else {
@@ -27,6 +27,7 @@ function handleSignInError(error) {
   }
 }
 
+// Shows an error message above the login form.
 function showSignInError(errorMessage) {
   $('#signInErrorMessage').html(errorMessage);
   $('#signInAlert').toggleClass('hidden', false);
@@ -36,12 +37,13 @@ function hideSignInError() {
   $('#signInAlert').toggleClass('hidden', true);
 }
 
+// Resets the UI of the modal.
+// Clears the input elements and resets the button state.
 function clearSignInModal() {
   $('#buttonSignIn').button('reset');
 
   $('#inputEmailSignIn').val('');
   $('#inputPasswordSignIn').val('');
-  
 
   hideSignInError();
 }
@@ -49,6 +51,7 @@ function clearSignInModal() {
 
 function bindEvents() {
   $('#buttonSignIn').on('click', signInUser);
+
   $('#modalSignIn').on('hidden.bs.modal', clearSignInModal);
   $('#modalSignIn').on('shown.bs.modal', function() {
     $('#inputEmailSignIn').focus();

@@ -1,3 +1,5 @@
+// Defines UI interaction that are used by most pages.
+
 var signUpUI = require('./signUpUI');
 var signInUI = require('./signInUI');
 var headerUI = require('./headerUI');

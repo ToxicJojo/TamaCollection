@@ -103,6 +103,7 @@ function inputUsernameChange() {
 function bindEvents() {
   $('#buttonSignUp').on('click', signupButtonClick);
   $('#inputUsernameSignUp').on('change', inputUsernameChange);
+  
   $('#modalSignUp').on('hidden.bs.modal', clearModal);
   $('#modalSignUp').on('shown.bs.modal', function() {
     $('#inputUsernameSignUp').focus();

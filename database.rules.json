@@ -22,7 +22,8 @@
       ".write": "root.child('admins').child(auth.uid).exists()"
     },
     "shells": {
-      ".read": true
+      ".read": true,
+      ".write": "root.child('admins').child(auth.uid).exists()"
     },
     "collections":  {
       ".read": true,
