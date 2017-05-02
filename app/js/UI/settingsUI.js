@@ -1,9 +1,9 @@
-var commonUI = require('./commonUI');
-var auth = require('../auth');
-var validator = require('../validator');
-var user = require('../user');
+const commonUI = require('./commonUI');
+const auth = require('../auth');
+const validator = require('../validator');
+const userLib = require('../user');
 
-$(function() {
+$(() => {
   commonUI.bindEvents();
   bindEvents();
 
@@ -12,24 +12,17 @@ $(function() {
   auth.registerAuthStateListeners();
 
   $('#profileCol').LoadingOverlay('show', {
-    image: "",
-    fontawesome: 'fa fa-spinner fa-spin'
+    image: '',
+    fontawesome: 'fa fa-spinner fa-spin',
   });
 });
 
-var old_username;
 
-function authStateListener(user) {
-  if(user) {
-    firebase.database().ref('/users/' + user.uid).on('value', showUser);
-  } else {
-    window.location = '/';
-  }
-}
+let oldUsername;
 
 function showUser(userSnapshot) {
-  var user = userSnapshot.val();
-  old_username = user.username;
+  const user = userSnapshot.val();
+  oldUsername = user.username;
 
   $('#inputUsernameSettings').val(user.username);
   $('#textareaBioSettings').val(user.bio);
@@ -37,43 +30,53 @@ function showUser(userSnapshot) {
   $('#profileCol').LoadingOverlay('hide');
 }
 
+function authStateListener(user) {
+  if (user) {
+    firebase.database().ref(`/users/${user.uid}`).on('value', showUser);
+  } else {
+    window.location = '/';
+  }
+}
+
+
 function updateProfile() {
   $('#buttonUpdateProfile').button('loading');
   $('#updateProfileAlert').toggleClass('hidden', true);
 
-  var username = $('#inputUsernameSettings').val();
-  var bio = $('#textareaBioSettings').val();
+  const username = $('#inputUsernameSettings').val();
+  const bio = $('#textareaBioSettings').val();
 
-  var validationSuccess = true;
+  let validationSuccess = true;
 
-  auth.isUsernameAvaiable(username, function(nameAvaiable) {
+  auth.isUsernameAvaiable(username, (nameAvaiable) => {
     // Check if the name is avaiable if we changed it.
-    if(!nameAvaiable && old_username !== username) {
-      showInputError("Username");
+    if (!nameAvaiable && oldUsername !== username) {
+      showInputError('Username');
       validationSuccess = false;
     } else {
-      clearInputError("Username");
+      clearInputError('Username');
     }
 
-    if(!validator.validateBio(bio)) {
-      showInputError("Bio");
+    if (!validator.validateBio(bio)) {
+      showInputError('Bio');
       validationSuccess = false;
     } else {
-      clearInputError("Bio");
+      clearInputError('Bio');
     }
 
-    if(validationSuccess) {
-      var userData = {
-        username: username,
-        bio: bio
+    if (validationSuccess) {
+      const userData = {
+        username,
+        bio,
       };
 
-      user.updateUserData(userData, profileUpdateSuccessCallback);
+      userLib.updateUserData(userData, profileUpdateSuccessCallback);
     } else {
       $('#buttonUpdateProfile').button('reset');
     }
   });
 }
+
 
 function profileUpdateSuccessCallback() {
   $('#buttonUpdateProfile').button('reset');
@@ -81,16 +84,14 @@ function profileUpdateSuccessCallback() {
 }
 
 function showInputError(group) {
-  $('#formGroupSettings' + group).toggleClass('has-error', true);
-  $('#helpBlockSettings' + group).toggleClass('hidden', false);
+  $(`#formGroupSettings${group}`).toggleClass('has-error', true);
+  $(`#helpBlockSettings${group}`).toggleClass('hidden', false);
 }
 
 function clearInputError(group) {
-  $('#formGroupSettings' + group).toggleClass('has-error', false);
-  $('#helpBlockSettings' + group).toggleClass('hidden', true);
+  $(`#formGroupSettings${group}`).toggleClass('has-error', false);
+  $(`#helpBlockSettings${group}`).toggleClass('hidden', true);
 }
-
-
 
 function bindEvents() {
   $('#buttonUpdateProfile').on('click', updateProfile);

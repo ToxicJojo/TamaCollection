@@ -1,9 +1,10 @@
-var commonUI = require('./commonUI');
-var auth = require('../auth');
-var util = require('../util');
-var tamagotchi = require('../tamagotchi');
 
-$(function() {
+const commonUI = require('./commonUI');
+const auth = require('../auth');
+const util = require('../util');
+const tamagotchi = require('../tamagotchi');
+
+$(() => {
   commonUI.bindEvents();
   bindEvents();
 
@@ -13,25 +14,25 @@ $(function() {
   loadVersions();
 });
 
-var versions;
-var currentVersionId;
+let versions;
+let currentVersionId;
 
 function loadVersions() {
   commonUI.showLoadingSpinner('#editShellPanel');
 
-  tamagotchi.getVersions(function (versionSnapshot) {
+  tamagotchi.getVersions((versionSnapshot) => {
     versions = versionSnapshot.val();
     showVersions();
   });
 }
 
 function showVersions() {
-  var versionSelect = $('#selectVersion');
+  const versionSelect = $('#selectVersion');
 
   versionSelect.html('');
 
-  util.cycleObjectProperties(versions, function(versionId, version) {
-    versionSelect.append('<option value="' + versionId + '">' + version.name + '</option>');
+  util.cycleObjectProperties(versions, (versionId, version) => {
+    versionSelect.append(`<option value="${versionId}">${version.name}</option>`);
   });
 
   commonUI.hideLoadingSpinner('#editReleasePanel');
@@ -39,6 +40,11 @@ function showVersions() {
   currentVersionId = $('#selectVersion').val();
   loadReleases(currentVersionId);
 }
+
+
+let releases;
+let currentReleaseId;
+let currentShellId;
 
 function changeVersion(e) {
   e.preventDefault();
@@ -52,24 +58,21 @@ function changeVersion(e) {
   loadReleases(currentVersionId);
 }
 
-var releases;
-var currentReleaseId;
-
 function loadReleases(versionId) {
-  tamagotchi.listenOnReleases(versionId, function (releasesSnapshot) {
+  tamagotchi.listenOnReleases(versionId, (releasesSnapshot) => {
     releases = releasesSnapshot.val();
 
     showReleases();
-  })
+  });
 }
 
 function showReleases() {
-  var releaseSelect = $('#selectRelease');
+  const releaseSelect = $('#selectRelease');
 
   releaseSelect.html('');
 
-  util.cycleObjectProperties(releases, function(releaseId, release) {
-    releaseSelect.append('<option value="' + releaseId + '">' + release.name + '</option>');
+  util.cycleObjectProperties(releases, (releaseId, release) => {
+    releaseSelect.append(`<option value="${releaseId}">${release.name}</option>`);
   });
 
   currentReleaseId = releaseSelect.val();
@@ -88,13 +91,12 @@ function changeRelease(e) {
   loadShells(currentReleaseId);
 }
 
-var shells;
-var currentShellId;
+let shells;
 
 function loadShells(releaseId) {
   commonUI.showLoadingSpinner('#selectShell');
 
-  tamagotchi.listenOnShells(releaseId, function(shellsSnapshot) {
+  tamagotchi.listenOnShells(releaseId, (shellsSnapshot) => {
     shells = shellsSnapshot.val();
 
     showShells();
@@ -102,18 +104,18 @@ function loadShells(releaseId) {
 }
 
 function showShells() {
-  var shellSelect = $('#selectShell');
+  const shellSelect = $('#selectShell');
 
   shellSelect.html('');
 
-  util.cycleObjectProperties(shells, function(shellId, shell) {
-    shellSelect.append('<option value="' + shellId + '">' + shell.color + '</option>');
+  util.cycleObjectProperties(shells, (shellId, shell) => {
+    shellSelect.append(`<option value="${shellId}">${shell.color}</option>`);
   });
 
-  if(currentShellId) {
+  if (currentShellId) {
     $('#selectShell').val(currentShellId);
     showShell(currentShellId);
-  } else if(shells) {
+  } else if (shells) {
     currentShellId = $('#selectShell').val();
     showShell(currentShellId);
   }
@@ -131,9 +133,7 @@ function changeShell(e) {
 }
 
 function showShell(shellId) {
-  var shell = shells[shellId];
-
-  console.log(shell);
+  const shell = shells[shellId];
 
   $('#inputShellColor').val(shell.color);
   $('#shellImage').attr('src', shell.img);
@@ -144,34 +144,32 @@ function updateShell(e) {
 
   $('#buttonUpdateShell').button('loading');
 
-  var shellColor = $('#inputShellColor').val();
+  const shellColor = $('#inputShellColor').val();
 
-  var file = document.getElementById('inputShellImageFile').files[0];
+  const file = document.getElementById('inputShellImageFile').files[0];
 
-  var shell = {
-    color: shellColor
+  const shell = {
+    color: shellColor,
   };
 
-  if(file) {
-    var imageRef = firebase.storage().ref().child('/images/shells/' + currentShellId + '/shellImage.png');
+  if (file) {
+    const imageRef = firebase.storage().ref().child(`/images/shells/${currentShellId}/shellImage.png`);
 
-    var uploadTask = imageRef.put(file);
+    const uploadTask = imageRef.put(file);
 
     uploadTask.on('state_changed',
-      function complete(snapshot) {
+      (snapshot) => {
         shell.img = snapshot.downloadURL;
         shell.thumbnail = snapshot.downloadURL;
 
-        tamagotchi.updateShell(currentReleaseId, currentShellId, shell, function() {
+        tamagotchi.updateShell(currentReleaseId, currentShellId, shell, () => {
           $('#buttonUpdateShell').button('reset');
           $('#inputShellImageFile').val('');
-          //loadShells(currentReleaseId);
         });
-    });
+      });
   } else {
-    tamagotchi.updateShell(currentReleaseId, currentShellId, shell, function() {
+    tamagotchi.updateShell(currentReleaseId, currentShellId, shell, () => {
       $('#buttonUpdateShell').button('reset');
-      //loadShells(currentReleaseId);
     });
   }
 }
@@ -181,9 +179,8 @@ function addShell(e) {
 
   $('#buttonAddShell').button('loading');
 
-  tamagotchi.addShell(currentReleaseId, function() {
+  tamagotchi.addShell(currentReleaseId, () => {
     $('#buttonAddShell').button('reset');
-    //loadShells();
   });
 }
 
@@ -192,13 +189,13 @@ function deleteShell(e) {
 
   $('#buttonDeleteShell').button('loading');
 
-  if(currentReleaseId && currentShellId) {
-    var deleteShellId = currentShellId;
+  if (currentReleaseId && currentShellId) {
+    const deleteShellId = currentShellId;
     // We need to set the currentShellId to null so we don't try to load the shell right
     // after it was deleted.
     currentShellId = null;
-    
-    tamagotchi.deleteShell(currentReleaseId, deleteShellId, function() {
+
+    tamagotchi.deleteShell(currentReleaseId, deleteShellId, () => {
       $('#buttonDeleteShell').button('reset');
 
       $('#selectRelease').prop('selectedIndex', 0);

@@ -1,13 +1,13 @@
 function addTo(group, versionId, releaseId, shellId, successCallback) {
-  var database = firebase.database();
+  const database = firebase.database();
 
-  var updates = {};
+  const updates = {};
 
-  updates['/collections/' + firebase.auth().currentUser.uid + '/' + versionId + '/' + releaseId + '/' + shellId + '/' + group] = true;
+  updates[`/collections/${firebase.auth().currentUser.uid}/${versionId}/${releaseId}/${shellId}/${group}`] = true;
 
   // If a shell is added to the colection, remove it from the wanted list.
-  if(group === 'collected') {
-    updates['/collections/' + firebase.auth().currentUser.uid + '/' + versionId + '/' + releaseId + '/' + shellId + '/wanted'] = null;
+  if (group === 'collected') {
+    updates[`/collections/${firebase.auth().currentUser.uid}/${versionId}/${releaseId}/${shellId}/wanted`] = null;
   }
 
   database.ref().update(updates)
@@ -15,20 +15,21 @@ function addTo(group, versionId, releaseId, shellId, successCallback) {
 }
 
 function removeFrom(group, versionId, releaseId, shellId, successCallback) {
-  var database = firebase.database();
+  const database = firebase.database();
 
-  var updates = {};
-  updates['/collections/' + firebase.auth().currentUser.uid + '/' + versionId + '/' + releaseId + '/' + shellId + '/' + group] = null;
+  const updates = {};
+
+  updates[`/collections/${firebase.auth().currentUser.uid}/${versionId}/${releaseId}/${shellId}/${group}`] = null;
 
   database.ref().update(updates)
     .then(successCallback);
 }
 
 function isItemIn(collection, group, versionId, releaseId, shellId) {
-  if(collection[versionId]) {
-    if(collection[versionId][releaseId]) {
-      if(collection[versionId][releaseId][shellId]) {
-        if(collection[versionId][releaseId][shellId][group]){
+  if (collection[versionId]) {
+    if (collection[versionId][releaseId]) {
+      if (collection[versionId][releaseId][shellId]) {
+        if (collection[versionId][releaseId][shellId][group]) {
           return true;
         }
       }
@@ -50,11 +51,10 @@ function isItemInFavorite(collection, versionId, releaseId, shellId) {
 }
 
 
-
 function listenOnCollection(collectionListener) {
-  var database = firebase.database();
+  const database = firebase.database();
 
-  database.ref('/collections/' + firebase.auth().currentUser.uid).on('value', collectionListener);
+  database.ref(`/collections/${firebase.auth().currentUser.uid}`).on('value', collectionListener);
 }
 
 exports.addTo = addTo;

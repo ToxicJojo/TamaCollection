@@ -1,9 +1,9 @@
-var commonUI = require('./commonUI');
-var auth = require('../auth');
-var tamagotchi = require('../tamagotchi');
-var util = require('../util');
+const commonUI = require('./commonUI');
+const auth = require('../auth');
+const tamagotchi = require('../tamagotchi');
+const util = require('../util');
 
-$(function() {
+$(() => {
   commonUI.bindEvents();
   bindEvents();
 
@@ -13,12 +13,11 @@ $(function() {
 
   commonUI.showLoadingSpinner('#editVersionPanel');
   tamagotchi.listenOnVerions(versionsListener);
-
 });
 
 
-var versions;
-var currentVersionId;
+let versions;
+let currentVersionId;
 
 function versionsListener(versionSnapshot) {
   commonUI.hideLoadingSpinner('#editVersionPanel');
@@ -29,15 +28,15 @@ function versionsListener(versionSnapshot) {
 
 
 function showVersions() {
-  var versionSelect = $('#selectVersion');
+  const versionSelect = $('#selectVersion');
 
   versionSelect.html('');
 
-  util.cycleObjectProperties(versions, function(versionId, version) {
-    versionSelect.append('<option value="' + versionId + '">' + version.name + '</option>');
+  util.cycleObjectProperties(versions, (versionId, version) => {
+    versionSelect.append(`<option value="${versionId}">${version.name}</option>`);
   });
 
-  if(currentVersionId) {
+  if (currentVersionId) {
     versionSelect.val(currentVersionId);
   } else {
     versionSelect.change();
@@ -47,9 +46,9 @@ function showVersions() {
 function changeVersion(e) {
   e.preventDefault();
 
-  var versionId = $(this).val();
+  const versionId = $(this).val();
 
-  var version = versions[versionId];
+  const version = versions[versionId];
   currentVersionId = versionId;
   showVersion(version);
 }
@@ -65,17 +64,17 @@ function updateVersion(e) {
 
   $('#buttonUpdateVersion').button('loading');
 
-  var versionName = $('#inputVersionName').val();
-  var versionDescription = $('#inputDescription').val();
-  var versionShorthand = $('#inputShorthand').val();
+  const versionName = $('#inputVersionName').val();
+  const versionDescription = $('#inputDescription').val();
+  const versionShorthand = $('#inputShorthand').val();
 
-  var version = {
+  const version = {
     name: versionName,
     description: versionDescription,
-    shorthand: versionShorthand
+    shorthand: versionShorthand,
   };
 
-  tamagotchi.updateVersion(currentVersionId, version, function() {
+  tamagotchi.updateVersion(currentVersionId, version, () => {
     $('#buttonUpdateVersion').button('reset');
   });
 }
@@ -86,7 +85,7 @@ function addVersion(e) {
 
   currentVersionId = 0;
 
-  tamagotchi.addVersion(function () {
+  tamagotchi.addVersion(() => {
     $('#buttonAddVersion').button('reset');
   });
 }
@@ -96,13 +95,12 @@ function deleteVersion(e) {
 
   $('#buttonDeleteVersion').button('loading');
 
-  if(currentVersionId) {
-    tamagotchi.deleteVersion(currentVersionId, function() {
+  if (currentVersionId) {
+    tamagotchi.deleteVersion(currentVersionId, () => {
       $('#buttonDeleteVersion').button('reset');
       $('#selectVersion').prop('selectedIndex', 0);
     });
   }
-
 }
 
 

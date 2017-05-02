@@ -21,6 +21,11 @@
   "homepage": "https://github.com/ToxicJojo/TamaCollection#readme",
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.3",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-browserify": "^0.5.1",

@@ -1,4 +1,4 @@
-var BIO_MAX_LENGTH = 300;
+const BIO_MAX_LENGTH = 300;
 
 // A valid username needs to be non empty.
 function validateUsername(username) {

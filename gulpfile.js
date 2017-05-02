@@ -1,10 +1,9 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var pug = require('gulp-pug');
-var browserify = require('gulp-browserify');
-var uglify = require('gulp-uglify');
-var babel = require('gulp-babel');
-var exec = require('child_process').exec;
+const gulp = require('gulp');
+const pug = require('gulp-pug');
+const browserify = require('gulp-browserify');
+const uglify = require('gulp-uglify');
+const babel = require('gulp-babel');
+const exec = require('child_process').exec;
 
 gulp.task('pug', () => {
   return gulp.src('app/templates/pages/**/*.pug')
@@ -22,7 +21,7 @@ gulp.task('javascript', () => {
   return gulp.src('app/js/UI/*.js')
     .pipe(browserify())
     .pipe(babel({
-      presets: ['es2015']
+      presets: ['es2015'],
     }))
     .pipe(uglify())
     .pipe(gulp.dest('public/js'));
@@ -31,7 +30,7 @@ gulp.task('javascript', () => {
 
 gulp.task('develop', () => {
   gulp.watch('app/templates/**/*.pug', ['pug']);
-  gulp.watch('app/templates/client/**/*.pug', ['pugClient'])
+  gulp.watch('app/templates/client/**/*.pug', ['pugClient']);
   gulp.watch('app/js/**/*.js', ['javascript']);
   // Start the firebase server.
   exec('firebase serve');

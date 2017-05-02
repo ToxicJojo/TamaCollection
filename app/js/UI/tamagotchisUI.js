@@ -1,10 +1,10 @@
-var commonUI = require('./commonUI');
-var auth = require('../auth');
-var tamagotchi = require('../tamagotchi');
-var util = require('../util');
-var collection = require('../collection');
+const commonUI = require('./commonUI');
+const auth = require('../auth');
+const tamagotchi = require('../tamagotchi');
+const util = require('../util');
+const collection = require('../collection');
 
-$(function() {
+$(() => {
   commonUI.bindEvents();
   bindEvents();
 
@@ -22,9 +22,17 @@ $(function() {
 
 // Version
 
+let versions = {};
+let releases = {};
+let shells = {};
+
+// The default path.
+const oldPath = ['', 'tamagotchis'];
+
+
 function getCurrentVersionId() {
   // The path looks like /tamagotchis/$versionId
-  var path = window.location.pathname.split('/');
+  const path = window.location.pathname.split('/');
 
   return path[2];
 }
@@ -41,7 +49,7 @@ function getOldVersionId() {
 
 function getCurrentReleaseId() {
   // The path looks like /tamagotchis/$versionId/$releaseId
-  var path = window.location.pathname.split('/');
+  const path = window.location.pathname.split('/');
 
   return path[3];
 }
@@ -58,7 +66,7 @@ function getOldReleaseId() {
 
 function getCurrentShellId() {
   // The path looks like /tamagotchis/$versionId/$releaseId/$shellId
-  var path = window.location.pathname.split('/');
+  const path = window.location.pathname.split('/');
 
   return path[4];
 }
@@ -72,21 +80,15 @@ function getOldShellId() {
 }
 
 
-// The default path.
-var oldPath = ['', 'tamagotchis'];
-
-
 // Is called whenever the url changes.
 // Detects which parts of the url changed
 // and loads the appropiated version/release/shell.
 // The url looks like /tamagotchis/$versionId/$releaseId/$shellId
 function handleLocationChange() {
-  var location = window.location;
-
-  var versionId = getCurrentVersionId();
+  const versionId = getCurrentVersionId();
 
   // Check if a versionId is present and if it changed.
-  if(versionId && (getOldVersionId() !== versionId)) {
+  if (versionId && (getOldVersionId() !== versionId)) {
     handleVersionChange();
     // Save the oldPath. We can reset the versionId ([3]) and shellId ([4])
     // because a versions change means the release/shell changed aswell or are
@@ -95,19 +97,19 @@ function handleLocationChange() {
     oldPath[3] = '';
     oldPath[4] = '';
   } else {
-    var releaseId = getCurrentReleaseId();
+    const releaseId = getCurrentReleaseId();
     // Check if a releaseId is present and if it changed
-    if(releaseId && getOldReleaseId() !== releaseId) {
-        handleReleaseChange();
-        // Save the oldPath. We can reset the shellId ([4])
-        // because a versions change means the shell changed aswell or is
-        // not present.
-        oldPath[3] = releaseId;
-        oldPath[4] = '';
+    if (releaseId && getOldReleaseId() !== releaseId) {
+      handleReleaseChange();
+      // Save the oldPath. We can reset the shellId ([4])
+      // because a versions change means the shell changed aswell or is
+      // not present.
+      oldPath[3] = releaseId;
+      oldPath[4] = '';
     } else {
-      var shellId = getCurrentShellId();
+      const shellId = getCurrentShellId();
       // Check if a shellId is present and if it changed
-      if(shellId && getOldShellId() !== shellId) {
+      if (shellId && getOldShellId() !== shellId) {
         handleShellChange();
         oldPath[4] = shellId;
       } else {
@@ -117,14 +119,11 @@ function handleLocationChange() {
   }
 }
 
-
-var versions = {};
-
 // Gets a snapshot of the versions from the database and saves it in 'versions'.
 function loadVersions() {
   commonUI.showLoadingSpinner('#versionNav');
 
-  tamagotchi.getVersions(function(versionSnapshot) {
+  tamagotchi.getVersions((versionSnapshot) => {
     versions = versionSnapshot.val();
     showVersions();
     // After loading the versions check the url
@@ -135,16 +134,17 @@ function loadVersions() {
 
 // Shows the list of versions in the righthand menue.
 function showVersions() {
-  var versionNav = $('#versionNav');
+  const versionNav = $('#versionNav');
 
   // Reset the old versionlist.
   versionNav.html('');
 
-  util.cycleObjectProperties(versions, function(versionId, version) {
-    version.id = versionId;
+  util.cycleObjectProperties(versions, (versionId, version) => {
+    const versionData = version;
+    versionData.id = versionId;
 
-    var templateData = {
-      version: version
+    const templateData = {
+      version: versionData,
     };
 
     versionNav.append(versionlistTemplate(templateData));
@@ -156,43 +156,39 @@ function showVersions() {
 }
 
 function showVersion(version) {
-    $('#versionInfoName').html(version.name);
-    $('#versionInfoDescription').html(version.description);
-    $('#versionInfoShorthand').html(version.shorthand);
+  $('#versionInfoName').html(version.name);
+  $('#versionInfoDescription').html(version.description);
+  $('#versionInfoShorthand').html(version.shorthand);
 
-    hideRelease();
+  hideRelease();
 }
 
 
 function versionNavClickHandler(e) {
   e.preventDefault();
 
-  var versionId = $(this).data().versionid;
+  const versionId = $(this).data().versionid;
 
-  history.pushState({}, '', '/tamagotchis/' + versionId);
+  history.pushState({}, '', `/tamagotchis/${versionId}`);
 
   handleLocationChange();
 }
 
 
 function handleVersionChange() {
-  var versionId = getCurrentVersionId();
-  $('.version-nav-li').toggleClass('active', false);
-  $('#versionNav' + versionId).toggleClass('active', true);
+  const versionId = getCurrentVersionId();
 
+  $('.version-nav-li').toggleClass('active', false);
+  $(`#versionNav${versionId}`).toggleClass('active', true);
 
   showVersion(getCurrentVersion());
   loadReleases(versionId);
 }
 
-
-
-var releases;
-
 function loadReleases(versionId) {
   commonUI.showLoadingSpinner('#releaseNav');
 
-  tamagotchi.getReleases(versionId, function(releaseSnapshot) {
+  tamagotchi.getReleases(versionId, (releaseSnapshot) => {
     releases = releaseSnapshot.val();
     showReleases();
 
@@ -201,17 +197,18 @@ function loadReleases(versionId) {
 }
 
 function showReleases() {
-  var releaseNav =  $('#releaseNav');
+  const releaseNav = $('#releaseNav');
   releaseNav.html('');
 
-  var releaseContent = $('#releaseContent');
+  const releaseContent = $('#releaseContent');
   releaseContent.html('');
 
-  util.cycleObjectProperties(releases, function(releaseId, release) {
-    release.id = releaseId;
+  util.cycleObjectProperties(releases, (releaseId, release) => {
+    const releaseData = release;
+    releaseData.id = releaseId;
 
-    var templateData = {
-      release: release
+    const templateData = {
+      release: releaseData,
     };
 
     releaseNav.append(releasetabTemplate(templateData));
@@ -224,13 +221,13 @@ function showReleases() {
 }
 
 function handleReleaseChange() {
-  var releaseId = getCurrentReleaseId();
+  const releaseId = getCurrentReleaseId();
 
   $('.tab').toggleClass('active', false);
-  $('#releaseNav' + releaseId).toggleClass('active', true);
+  $(`#releaseNav${releaseId}`).toggleClass('active', true);
 
   $('.release-content').toggleClass('hidden', true);
-  $('#releaseContent' + releaseId).toggleClass('hidden', false);
+  $(`#releaseContent${releaseId}`).toggleClass('hidden', false);
 
   showRelease(getCurrentRelease());
   loadShells(getCurrentReleaseId());
@@ -253,20 +250,16 @@ function hideRelease() {
 function releaseNavClickHandler(e) {
   e.preventDefault();
 
-  var releaseId = $(this).data().releaseid;
+  const releaseId = $(this).data().releaseid;
 
-  history.pushState({}, '', '/tamagotchis/' + getCurrentVersionId() + '/' + releaseId);
+  history.pushState({}, '', `/tamagotchis/${getCurrentVersionId()}/${releaseId}`);
   handleLocationChange();
 }
-
-
-
-var shells;
 
 function loadShells(releaseId) {
   commonUI.showLoadingSpinner('#releaseContent');
 
-  tamagotchi.getShells(releaseId, function(shellsSnapshot) {
+  tamagotchi.getShells(releaseId, (shellsSnapshot) => {
     shells = shellsSnapshot.val();
     showShells();
     handleLocationChange();
@@ -274,17 +267,18 @@ function loadShells(releaseId) {
 }
 
 function showShells() {
-  var releaseContent = $('#releaseContent' + getCurrentReleaseId());
+  const releaseContent = $(`#releaseContent${getCurrentReleaseId()}`);
 
   releaseContent.html('');
 
-  var html = '<div class="row">'
+  let html = '<div class="row">';
 
-  util.cycleObjectProperties(shells, function(shellId, shell) {
-    shell.id = shellId;
+  util.cycleObjectProperties(shells, (shellId, shell) => {
+    const shellData = shell;
+    shellData.id = shellId;
 
-    var templateData = {
-      shell: shell
+    const templateData = {
+      shell: shellData,
     };
 
     html += (shellthumbnailTemplate(templateData));
@@ -295,7 +289,7 @@ function showShells() {
 
   $('#releaseContent').LoadingOverlay('hide');
 
-  if(firebase.auth().currentUser) {
+  if (firebase.auth().currentUser) {
     showThumbnailCollectionStatus();
   }
 
@@ -305,9 +299,9 @@ function showShells() {
 function shellThumbnailClickHandler(e) {
   e.preventDefault();
 
-  var shellId = $(this).data().shellid;
+  const shellId = $(this).data().shellid;
 
-  history.pushState({}, '', '/tamagotchis/' + getCurrentVersionId() + '/' + getCurrentReleaseId() + '/' + shellId);
+  history.pushState({}, '', `/tamagotchis/${getCurrentVersionId()}/${getCurrentReleaseId()}/${shellId}`);
   handleLocationChange();
 }
 
@@ -321,7 +315,7 @@ function showShell(shell) {
   $('#shellInfo').toggleClass('hidden', false);
 
   // If the user is logged in show the collectionButtons
-  if(firebase.auth().currentUser) {
+  if (firebase.auth().currentUser) {
     showCollectionStatus();
     $('#collectionStatus').toggleClass('hidden', false);
   } else {
@@ -335,29 +329,29 @@ function hideShell() {
 }
 
 
-var userCollection = {};
+let userCollection = {};
 
 function addCurrentShellTo(group) {
-  $('#buttonAddTo' + group.toUpperCase()).button('loading');
+  $(`#buttonAddTo${group.toUpperCase()}`).button('loading');
 
-  var versionId = getCurrentVersionId();
-  var releaseId = getCurrentReleaseId();
-  var shellId = getCurrentShellId();
+  const versionId = getCurrentVersionId();
+  const releaseId = getCurrentReleaseId();
+  const shellId = getCurrentShellId();
 
-  collection.addTo(group, versionId, releaseId, shellId, function() {
-    $('#buttonAddTo' + group.toUpperCase()).button('reset');
+  collection.addTo(group, versionId, releaseId, shellId, () => {
+    $(`#buttonAddTo${group.toUpperCase()}`).button('reset');
   });
 }
 
 function removeCurrentShellFrom(group) {
-  $('#buttonRemoveFrom' + group.toUpperCase()).button('loading');
+  $(`#buttonRemoveFrom${group.toUpperCase()}`).button('loading');
 
-  var versionId = getCurrentVersionId();
-  var releaseId = getCurrentReleaseId();
-  var shellId = getCurrentShellId();
+  const versionId = getCurrentVersionId();
+  const releaseId = getCurrentReleaseId();
+  const shellId = getCurrentShellId();
 
-  collection.removeFrom(group, versionId, releaseId, shellId, function() {
-    $('#buttonRemoveFrom' + group.toUpperCase()).button('reset');
+  collection.removeFrom(group, versionId, releaseId, shellId, () => {
+    $(`#buttonRemoveFrom${group.toUpperCase()}`).button('reset');
   });
 }
 
@@ -400,38 +394,36 @@ function removeFromFavoriteClickHandler(e) {
 
 
 function showThumbnailCollectionStatus() {
-  var versionId = getCurrentVersionId();
-  var releaseId = getCurrentReleaseId();
+  const versionId = getCurrentVersionId();
+  const releaseId = getCurrentReleaseId();
 
   $('.thumbnail-label').toggleClass('invisible', true);
 
-  if(userCollection[versionId]) {
+  if (userCollection[versionId]) {
+    const collectionShells = userCollection[versionId][releaseId];
 
-    var collectionShells = userCollection[versionId][releaseId];
-
-    util.cycleObjectProperties(collectionShells, function(shellId, shell) {
-      if(collection.isItemInCollection(userCollection, versionId, releaseId, shellId)) {
-        $('#labelCollected' + shellId).toggleClass('invisible', false);
+    util.cycleObjectProperties(collectionShells, (shellId, shell) => {
+      if (collection.isItemInCollection(userCollection, versionId, releaseId, shellId)) {
+        $(`#labelCollected${shellId}`).toggleClass('invisible', false);
       }
 
-      if(collection.isItemInWanted(userCollection, versionId, releaseId, shellId)) {
-        $('#labelWanted' + shellId).toggleClass('invisible', false);
+      if (collection.isItemInWanted(userCollection, versionId, releaseId, shellId)) {
+        $(`#labelWanted${shellId}`).toggleClass('invisible', false);
       }
 
-      if(collection.isItemInFavorite(userCollection, versionId, releaseId, shellId)) {
-        $('#labelFavorite' + shellId).toggleClass('invisible', false);
+      if (collection.isItemInFavorite(userCollection, versionId, releaseId, shellId)) {
+        $(`#labelFavorite${shellId}`).toggleClass('invisible', false);
       }
     });
-
   }
 }
 
 function showCollectionStatus() {
-  var versionId = getCurrentVersionId();
-  var releaseId = getCurrentReleaseId();
-  var shellId = getCurrentShellId();
+  const versionId = getCurrentVersionId();
+  const releaseId = getCurrentReleaseId();
+  const shellId = getCurrentShellId();
 
-  if(collection.isItemInCollection(userCollection, versionId, releaseId, shellId)) {
+  if (collection.isItemInCollection(userCollection, versionId, releaseId, shellId)) {
     $('#buttonAddToCollected').toggleClass('hidden', true);
     $('#buttonRemoveFromCollected').toggleClass('hidden', false);
     $('#buttonAddToWanted').toggleClass('hidden', true);
@@ -440,7 +432,7 @@ function showCollectionStatus() {
     $('#buttonAddToCollected').toggleClass('hidden', false);
     $('#buttonRemoveFromCollected').toggleClass('hidden', true);
 
-    if(collection.isItemInWanted(userCollection, versionId, releaseId, shellId)) {
+    if (collection.isItemInWanted(userCollection, versionId, releaseId, shellId)) {
       $('#buttonAddToWanted').toggleClass('hidden', true);
       $('#buttonRemoveFromWanted').toggleClass('hidden', false);
     } else {
@@ -449,21 +441,20 @@ function showCollectionStatus() {
     }
   }
 
-  if(collection.isItemInFavorite(userCollection, versionId, releaseId, shellId)) {
+  if (collection.isItemInFavorite(userCollection, versionId, releaseId, shellId)) {
     $('#buttonAddToFavorite').toggleClass('hidden', true);
     $('#buttonRemoveFromFavorite').toggleClass('hidden', false);
   } else {
     $('#buttonAddToFavorite').toggleClass('hidden', false);
     $('#buttonRemoveFromFavorite').toggleClass('hidden', true);
   }
-
 }
 
 function collectionListener(collectionSnapshot) {
   userCollection = collectionSnapshot.val();
   // If the user has no items in his collection set it to an empty object to
   // avoid null exceptions.
-  if(!userCollection) {
+  if (!userCollection) {
     userCollection = {};
   }
 
@@ -472,7 +463,7 @@ function collectionListener(collectionSnapshot) {
 }
 
 function authStateListener(user) {
-  if(user) {
+  if (user) {
     collection.listenOnCollection(collectionListener);
   }
 }

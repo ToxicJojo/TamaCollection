@@ -1,9 +1,9 @@
-var commonUI = require('./commonUI');
-var auth = require('../auth');
-var util = require('../util');
-var tamagotchi = require('../tamagotchi');
+const commonUI = require('./commonUI');
+const auth = require('../auth');
+const util = require('../util');
+const tamagotchi = require('../tamagotchi');
 
-$(function() {
+$(() => {
   commonUI.bindEvents();
   bindEvents();
 
@@ -13,24 +13,24 @@ $(function() {
   loadVersions();
 });
 
-var versions;
-var currentVersionId;
+let versions;
+let currentVersionId;
 
 function loadVersions() {
   commonUI.showLoadingSpinner('#editReleasePanel');
-  tamagotchi.getVersions(function (versionSnapshot) {
+  tamagotchi.getVersions((versionSnapshot) => {
     versions = versionSnapshot.val();
     showVersions();
   });
 }
 
 function showVersions() {
-  var versionSelect = $('#selectVersion');
+  const versionSelect = $('#selectVersion');
 
   versionSelect.html('');
 
-  util.cycleObjectProperties(versions, function(versionId, version) {
-    versionSelect.append('<option value="' + versionId + '">' + version.name + '</option>');
+  util.cycleObjectProperties(versions, (versionId, version) => {
+    versionSelect.append(`<option value="${versionId}">${version.name}</option>`);
   });
 
   commonUI.hideLoadingSpinner('#editReleasePanel');
@@ -38,6 +38,10 @@ function showVersions() {
   currentVersionId = $('#selectVersion').val();
   loadReleases(currentVersionId);
 }
+
+
+let releases;
+let currentReleaseId;
 
 function changeVersion(e) {
   e.preventDefault();
@@ -50,35 +54,32 @@ function changeVersion(e) {
   loadReleases(currentVersionId);
 }
 
-var releases;
-var currentReleaseId;
 
 function loadReleases(versionId) {
-  tamagotchi.listenOnReleases(versionId, function (releasesSnapshot) {
+  tamagotchi.listenOnReleases(versionId, (releasesSnapshot) => {
     releases = releasesSnapshot.val();
 
     showReleases();
-  })
+  });
 }
 
 function showReleases() {
-  var versionSelect = $('#selectRelease');
+  const versionSelect = $('#selectRelease');
 
   versionSelect.html('');
 
-  util.cycleObjectProperties(releases, function(releaseId, release) {
-    versionSelect.append('<option value="' + releaseId + '">' + release.name + '</option>');
+  util.cycleObjectProperties(releases, (releaseId, release) => {
+    versionSelect.append(`<option value="${releaseId}">${release.name}</option>`);
   });
 
-  if(currentReleaseId) {
+  if (currentReleaseId) {
     $('#selectRelease').val(currentReleaseId);
-  } else if(releases) {
+  } else if (releases) {
     currentReleaseId = $('#selectRelease').val();
     showRelease(currentReleaseId);
   }
 
   commonUI.hideLoadingSpinner('#selectRelease');
-
 }
 
 function changeRelease(e) {
@@ -91,7 +92,7 @@ function changeRelease(e) {
 }
 
 function showRelease(releaseId) {
-  var release = releases[releaseId];
+  const release = releases[releaseId];
 
   $('#inputReleaseName').val(release.name);
   $('#inputReleaseDate').val(release.date);
@@ -103,18 +104,18 @@ function updateRelease(e) {
 
   $('#buttonUpdateRelease').button('loading');
 
-  var releaseName = $('#inputReleaseName').val();
-  var releaseDate = $('#inputReleaseDate').val();
-  var releasePrice = $('#inputReleasePrice').val();
+  const releaseName = $('#inputReleaseName').val();
+  const releaseDate = $('#inputReleaseDate').val();
+  const releasePrice = $('#inputReleasePrice').val();
 
-  var release = {
+  const release = {
     name: releaseName,
     date: releaseDate,
-    price: releasePrice
+    price: releasePrice,
   };
 
-  if(currentReleaseId && currentVersionId) {
-    tamagotchi.updateRelease(currentVersionId, currentReleaseId, release, function() {
+  if (currentReleaseId && currentVersionId) {
+    tamagotchi.updateRelease(currentVersionId, currentReleaseId, release, () => {
       $('#buttonUpdateRelease').button('reset');
     });
   } else {
@@ -128,7 +129,7 @@ function addRelease(e) {
 
   $('#buttonAddRelease').button('loading');
 
-  tamagotchi.addRelease(currentVersionId, function() {
+  tamagotchi.addRelease(currentVersionId, () => {
     $('#buttonAddRelease').button('reset');
   });
 }
@@ -138,8 +139,8 @@ function deleteRelease(e) {
 
   $('#buttonDeleteRelease').button('loading');
 
-  if(currentVersionId && currentReleaseId) {
-    tamagotchi.deleteRelease(currentVersionId, currentReleaseId, function() {
+  if (currentVersionId && currentReleaseId) {
+    tamagotchi.deleteRelease(currentVersionId, currentReleaseId, () => {
       $('#buttonDeleteRelease').button('reset');
 
       $('#selectRelease').prop('selectedIndex', 0);

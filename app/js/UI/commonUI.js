@@ -1,8 +1,8 @@
 // Defines UI interaction that are used by most pages.
 
-var signUpUI = require('./signUpUI');
-var signInUI = require('./signInUI');
-var headerUI = require('./headerUI');
+const signUpUI = require('./signUpUI');
+const signInUI = require('./signInUI');
+const headerUI = require('./headerUI');
 
 function bindEvents() {
   signUpUI.bindEvents();
@@ -16,8 +16,8 @@ function authStateListener(user) {
 
 function showLoadingSpinner(jquerySelector) {
   $(jquerySelector).LoadingOverlay('show', {
-    image: "",
-    fontawesome: 'fa fa-spinner fa-spin'
+    image: '',
+    fontawesome: 'fa fa-spinner fa-spin',
   });
 }
 
