@@ -35,7 +35,7 @@ function listenOnReleases(versionId, releasesListener) {
 function listenOnShells(releaseId, shellsListener) {
   const database = firebase.database();
 
-  database.ref(`/shells${releaseId}/`).on('value', shellsListener);
+  database.ref(`/shells/${releaseId}`).on('value', shellsListener);
 }
 
 
