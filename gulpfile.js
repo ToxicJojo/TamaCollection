@@ -46,3 +46,7 @@ gulp.task('develop', () => {
   // Start the firebase server.
   exec('firebase serve');
 });
+
+gulp.task('deploy', ['javascript', 'pug', 'pugClient'], () => {
+  exec('firebase deploy');
+});
