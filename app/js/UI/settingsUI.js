@@ -27,6 +27,10 @@ function showUser(userSnapshot) {
   $('#inputUsernameSettings').val(user.username);
   $('#textareaBioSettings').val(user.bio);
 
+  if (user.profileImg) {
+    $('#imgProfilePicture').attr('src', user.profileImg);
+  }
+
   $('#profileCol').LoadingOverlay('hide');
 }
 
@@ -77,6 +81,24 @@ function updateProfile() {
   });
 }
 
+function uploadProfilePicture(e) {
+  e.preventDefault();
+  $('#buttonUploadPicture').button('loading');
+
+  const file = document.getElementById('inputFileProfilePicture').files[0];
+
+  if (file) {
+    clearInputError('ProfilePicture');
+    userLib.updateProfilePicture(file, () => {
+      $('#buttonUploadPicture').button('reset');
+    });
+  } else {
+    showInputError('ProfilePicture');
+
+    $('#buttonUploadPicture').button('reset');
+  }
+}
+
 
 function profileUpdateSuccessCallback() {
   $('#buttonUpdateProfile').button('reset');
@@ -95,4 +117,5 @@ function clearInputError(group) {
 
 function bindEvents() {
   $('#buttonUpdateProfile').on('click', updateProfile);
+  $('#buttonUploadPicture').on('click', uploadProfilePicture);
 }

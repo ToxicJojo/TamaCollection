@@ -28,6 +28,10 @@ function showUser(userSnapshot) {
 
   $('#headerUserName').text(user.username);
 
+  if (user.profileImg) {
+    $('#imgHeaderProfilePicture').attr('src', user.profileImg);
+  }
+
   hideSignInUp();
   showUserInfo();
 }

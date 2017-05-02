@@ -32,9 +32,13 @@ block content
               button#buttonUpdateProfile.btn.btn-default(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Profile
         .col-md-3
           label Profile Picture
-          img.img-responsive(src='/img/profile_pic.png')
+          img#imgProfilePicture.img-responsive(src='/img/profile_pic.png')
           center
-            button.btn.btn-default Upload Picture
+            .form-group#formGroupSettingsProfilePicture
+              input#inputFileProfilePicture(type='file')
+              span#helpBlockSettingsProfilePicture.help-block.hidden Please choose a file first
+              br
+              button#buttonUploadPicture.btn.btn-default(type='button' data-loading-text='Uploading <i class="fa fa-spinner fa-spin"></i>') Upload Picture
       #accountTab.hidden
         .col-md-9
           h2 Account

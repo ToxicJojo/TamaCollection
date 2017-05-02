@@ -27,11 +27,22 @@ gulp.task('javascript', () => {
     .pipe(gulp.dest('public/js'));
 });
 
+// Applies browserify, babel and uglifies the results.
+// The resulting files are written to public/js.
+gulp.task('javascript-dev', () => {
+  return gulp.src('app/js/UI/*.js')
+    .pipe(browserify())
+    .pipe(babel({
+      presets: ['es2015'],
+    }))
+    .pipe(gulp.dest('public/js'));
+});
+
 
 gulp.task('develop', () => {
   gulp.watch('app/templates/**/*.pug', ['pug']);
   gulp.watch('app/templates/client/**/*.pug', ['pugClient']);
-  gulp.watch('app/js/**/*.js', ['javascript']);
+  gulp.watch('app/js/**/*.js', ['javascript-dev']);
   // Start the firebase server.
   exec('firebase serve');
 });
