@@ -1,0 +1,20 @@
+extends ../application.pug
+
+block content
+  
+  .col-md-3
+    .panel.panel-default
+      .panel-heading
+        h3.panel-title User Info
+      .panel-body
+        img#profileUserImage.img-responsive(src='/img/profile_pic.png')
+        
+        dl.dl-horizontal
+          dt Name:
+          dd#profileUsername
+          dt Bio:
+          dd#profileUserBio
+          
+
+block append scripts
+  script(src='/js/profileUI.js')
