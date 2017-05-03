@@ -36,9 +36,17 @@ function showUser(userSnapshot) {
   showUserInfo();
 }
 
+function gotoUserProfile(e) {
+  e.preventDefault();
+
+  const uid = firebase.auth().currentUser.uid;
+
+  window.location = `/profile/${uid}`;
+}
 
 function bindEvents() {
   $('#headerSignOut').on('click', auth.signOut);
+  $('#headerGotoProfile').on('click', gotoUserProfile);
 }
 
 function authStateListener(user) {
