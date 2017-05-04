@@ -3,11 +3,11 @@ extends ../application.pug
 block content
   
   .col-md-3
-    .panel.panel-default
+    .panel.panel-default#profileInfoPanel
       .panel-heading
         h3.panel-title User Info
       .panel-body
-        img#profileUserImage.img-responsive(src='/img/profile_pic.png')
+        img#profileUserImage.img-responsive.img-rounded(src='/img/profile_pic.png')
         
         dl.dl-horizontal
           dt Name:
