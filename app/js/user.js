@@ -15,5 +15,10 @@ function updateProfilePicture(file, successCallback) {
   });
 }
 
+function getUser(uid, successCallback, errorCallback) {
+  firebase.database().ref(`/users/${uid}/`).once('value', successCallback, errorCallback);
+}
+
 exports.updateUserData = updateUserData;
 exports.updateProfilePicture = updateProfilePicture;
+exports.getUser = getUser;

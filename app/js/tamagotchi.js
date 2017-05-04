@@ -18,6 +18,12 @@ function getShells(releaseId, successCallback) {
   database.ref(`/shells/${releaseId}`).once('value', successCallback);
 }
 
+function getShell(releaseId, shellId, successCallback) {
+  const database = firebase.database();
+
+  database.ref(`/shells/${releaseId}/${shellId}`).once('value', successCallback);
+}
+
 // Listen Functions
 
 function listenOnVerions(versionsListener) {
@@ -133,6 +139,8 @@ function deleteShell(releaseId, shellId, successCallback) {
 exports.getVersions = getVersions;
 exports.getReleases = getReleases;
 exports.getShells = getShells;
+
+exports.getShell = getShell;
 
 exports.listenOnVerions = listenOnVerions;
 exports.listenOnReleases = listenOnReleases;

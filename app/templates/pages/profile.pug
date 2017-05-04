@@ -1,0 +1,58 @@
+extends ../application.pug
+
+block content
+  .container-fluid
+    .row
+      .col-md-3
+        .panel.panel-default#profileInfoPanel
+          .panel-heading
+            h3.panel-title User Info
+          .panel-body
+            .row
+              .col-md-12
+                img#profileUserImage.img-responsive.img-rounded(src='/img/profile_pic.png')
+            hr
+            .row
+              .col-md-4
+                a#profileSocialInstagram.btn.btn-social-icon.btn-instagram.hidden
+                  i.fa.fa-fw.fa-instagram
+              .col-md-4
+                a#profileSocialFacebook.btn.btn-social-icon.btn-facebook.hidden
+                  i.fa.fa-fw.fa-facebook
+              .col-md-4
+                a#profileSocialTwitter.btn.btn-social-icon.btn-twitter.hidden
+                  i.fa.fa-fw.fa-twitter
+                    
+            
+            dl.dl-horizontal
+              dt Name:
+              dd#profileUsername
+              dt Bio:
+              dd#profileUserBio
+      .col-md-9
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Collection
+          #profileCollectionPanel.panel-body
+            ul#profileCollectionTabs.nav.nav-tabs(role='tablist')
+              li#profileCollectedTab.tab.active(role='presentation' data-type='Collected')
+                a(href='#') Collected 
+                  span#profileCollectedCount.badge 0
+              li#profileWantedTab.tab(role='presentation' data-type='Wanted')
+                a(href='#') Wanted 
+                  span#profileWantedCount.badge 0
+              li#profileFavoriteTab.tab(role='presentation' data-type='Favorite')
+                a(href='#') Favorites 
+                  span#profileFavoriteCount.badge 0
+            #profileCollectedContent.profileCollectionContent
+            #profileWantedContent.profileCollectionContent.hidden
+            #profileFavoriteContent.profileCollectionContent.hidden
+
+
+
+
+          
+
+block append scripts
+  script(src='/js/templates/placeHolderShellThumbnail.js')
+  script(src='/js/profileUI.js')

@@ -28,6 +28,24 @@ block content
               label(for='textareaBioSettings') Bio
               textarea#textareaBioSettings.form-control(rows='3')
               span#helpBlockSettingsBio.help-block.hidden Your bio may only be 300 characters long.
+            
+            br
+            h4 Social
+            .help-block Link your social media accounts.
+            hr
+            .form-group#formGroupSettingsInstagram
+              label(for='inputUsernameSettings') Instagram
+              input#inputInstagramSettings.form-control(placeholder='Your instagram username.')
+              span#helpBlockSettingsInstagram.help-block.hidden Please enter a valid Instagram profile.
+            .form-group#formGroupSettingsFacebook
+              label(for='inputFacebookSettings') Facebook
+              input#inputFacebookSettings.form-control(placeholder='Your Facebook profile link.')
+              span#helpBlockSettingsFacebook.help-block.hidden Please enter a valid Facebook profile.
+            .form-group#formGroupSettingsTwitter
+              label(for='inputTwitterSettings') Twitter
+              input#inputTwitterSettings.form-control(placeholder='Your twitter username.')
+              span#helpBlockSettingsTwitter.help-block.hidden Please enter a valid Twitter profile.
+            
             .form-group
               button#buttonUpdateProfile.btn.btn-default(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Profile
         .col-md-3

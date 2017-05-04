@@ -27,6 +27,12 @@ function showUser(userSnapshot) {
   $('#inputUsernameSettings').val(user.username);
   $('#textareaBioSettings').val(user.bio);
 
+  if (user.social) {
+    $('#inputInstagramSettings').val(user.social.instagram);
+    $('#inputFacebookSettings').val(user.social.facebook);
+    $('#inputTwitterSettings').val(user.social.twitter);
+  }
+
   if (user.profileImg) {
     $('#imgProfilePicture').attr('src', user.profileImg);
   }
@@ -50,6 +56,18 @@ function updateProfile() {
   const username = $('#inputUsernameSettings').val();
   const bio = $('#textareaBioSettings').val();
 
+  // Social
+  const instagram = $('#inputInstagramSettings').val();
+  const facebook = $('#inputFacebookSettings').val();
+  const twitter = $('#inputTwitterSettings').val();
+
+  // TODO basic validation of the social links.
+  const social = {
+    instagram,
+    facebook,
+    twitter,
+  };
+
   let validationSuccess = true;
 
   auth.isUsernameAvaiable(username, (nameAvaiable) => {
@@ -72,6 +90,7 @@ function updateProfile() {
       const userData = {
         username,
         bio,
+        social,
       };
 
       userLib.updateUserData(userData, profileUpdateSuccessCallback);

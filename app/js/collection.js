@@ -1,3 +1,5 @@
+const util = require('./util');
+
 function addTo(group, versionId, releaseId, shellId, successCallback) {
   const database = firebase.database();
 
@@ -50,11 +52,51 @@ function isItemInFavorite(collection, versionId, releaseId, shellId) {
   return isItemIn(collection, 'favorite', versionId, releaseId, shellId);
 }
 
+function getCollectionList(collection) {
+  const collectionList = {
+    collected: [],
+    wanted: [],
+    favorite: [],
+  };
+
+  util.cycleObjectProperties(collection, (versionId, version) => {
+    util.cycleObjectProperties(version, (releaseId, release) => {
+      util.cycleObjectProperties(release, (shellId, shell) => {
+        const collectionItem = {
+          versionId,
+          releaseId,
+          shellId,
+        };
+
+        if (shell.collected) {
+          collectionList.collected.push(collectionItem);
+        }
+
+        if (shell.wanted) {
+          collectionList.wanted.push(collectionItem);
+        }
+
+        if (shell.favorite) {
+          collectionList.favorite.push(collectionItem);
+        }
+      });
+    });
+  });
+
+  return collectionList;
+}
+
 
 function listenOnCollection(collectionListener) {
   const database = firebase.database();
 
   database.ref(`/collections/${firebase.auth().currentUser.uid}`).on('value', collectionListener);
+}
+
+function listenOnUserCollection(userId, collectionListener) {
+  const database = firebase.database();
+
+  database.ref(`/collections/${userId}`).on('value', collectionListener);
 }
 
 exports.addTo = addTo;
@@ -65,4 +107,7 @@ exports.isItemInCollection = isItemInCollection;
 exports.isItemInWanted = isItemInWanted;
 exports.isItemInFavorite = isItemInFavorite;
 
+exports.getCollectionList = getCollectionList;
+
 exports.listenOnCollection = listenOnCollection;
+exports.listenOnUserCollection = listenOnUserCollection;
