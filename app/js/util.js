@@ -1,7 +1,9 @@
 function cycleObjectProperties(object, callbackFunction) {
-  Object.entries(object).forEach(([key, value]) => {
-    callbackFunction(key, value);
-  });
+  if (object) {
+    Object.entries(object).forEach(([key, value]) => {
+      callbackFunction(key, value);
+    });
+  }
 }
 
 function uploadFileToFirebase(file, path, callbackFunction) {
