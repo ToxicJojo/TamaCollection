@@ -120,9 +120,29 @@ function showUser(user) {
   $('#profileUsername').text(user.username);
   $('#profileUserBio').text(user.bio);
 
+  // Check  if the social link is present and non-empty.
+  if (user.social) {
+    if (user.social.instagram !== '') {
+      showSocial('Instagram', `https://www.instagram.com/${user.social.instagram}`);
+    }
+
+    if (user.social.facebook !== '') {
+      showSocial('Facebook', user.social.facebook);
+    }
+
+    if (user.social.twitter !== '') {
+      showSocial('Twitter', `https://twitter.com/${user.social.twitter}`);
+    }
+  }
+
   if (user.profileImg) {
     $('#profileUserImage').attr('src', user.profileImg);
   }
+}
+
+function showSocial(socialType, socialLink) {
+  $(`#profileSocial${socialType}`).toggleClass('hidden', false);
+  $(`#profileSocial${socialType}`).attr('href', socialLink);
 }
 
 
