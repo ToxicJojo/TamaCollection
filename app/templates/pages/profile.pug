@@ -35,12 +35,15 @@ block content
             h3.panel-title Collection
           #profileCollectionPanel.panel-body
             ul#profileCollectionTabs.nav.nav-tabs(role='tablist')
-              li#profileCollectedTab.tab(role='presentation' data-type='Collected')
-                a(href='#') Collected
+              li#profileCollectedTab.tab.active(role='presentation' data-type='Collected')
+                a(href='#') Collected 
+                  span#profileCollectedCount.badge 0
               li#profileWantedTab.tab(role='presentation' data-type='Wanted')
-                a(href='#') Wanted
+                a(href='#') Wanted 
+                  span#profileWantedCount.badge 0
               li#profileFavoriteTab.tab(role='presentation' data-type='Favorite')
-                a(href='#') Favorites
+                a(href='#') Favorites 
+                  span#profileFavoriteCount.badge 0
             #profileCollectedContent.profileCollectionContent
             #profileWantedContent.profileCollectionContent.hidden
             #profileFavoriteContent.profileCollectionContent.hidden

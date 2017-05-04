@@ -56,6 +56,13 @@ function showCollection(userCollection) {
     favorite: '<div class="row">',
   };
 
+  // Contains the amount of shells that are in the respective groups.
+  const count = {
+    collected: 0,
+    wanted: 0,
+    favorite: 0,
+  };
+
   /* Cycle throuh the collection object to find all shells
    * a user has in his collection.
    */
@@ -75,10 +82,10 @@ function showCollection(userCollection) {
          * html strings.
          */
         util.cycleObjectProperties(shellStatus, (collectionType) => {
+          count[collectionType] += 1;
           // Display a placeholder and update it once getShell resolves.
           shellData.type = collectionType;
           html[collectionType] += placeholdershellthumbnailTemplate(shellData);
-
 
           tamagotchi.getShell(releaseId, shellId, (shellSnapshot) => {
             const shell = shellSnapshot.val();
@@ -94,9 +101,15 @@ function showCollection(userCollection) {
   html.wanted += '<div>';
   html.favorite += '<div>';
 
+  // Show the collections
   $('#profileCollectedContent').html(html.collected);
   $('#profileWantedContent').html(html.wanted);
   $('#profileFavoriteContent').html(html.favorite);
+
+  // Show the collection, wanted and favorite count.
+  $('#profileCollectedCount').html(count.collected);
+  $('#profileWantedCount').html(count.wanted);
+  $('#profileFavoriteCount').html(count.favorite);
 }
 
 function showCollectionTab(tab) {
