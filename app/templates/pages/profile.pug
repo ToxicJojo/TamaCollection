@@ -1,20 +1,41 @@
 extends ../application.pug
 
 block content
-  
-  .col-md-3
-    .panel.panel-default#profileInfoPanel
-      .panel-heading
-        h3.panel-title User Info
-      .panel-body
-        img#profileUserImage.img-responsive.img-rounded(src='/img/profile_pic.png')
-        
-        dl.dl-horizontal
-          dt Name:
-          dd#profileUsername
-          dt Bio:
-          dd#profileUserBio
+  .container-fluid
+    .row
+      .col-md-3
+        .panel.panel-default#profileInfoPanel
+          .panel-heading
+            h3.panel-title User Info
+          .panel-body
+            img#profileUserImage.img-responsive.img-rounded(src='/img/profile_pic.png')
+            
+            dl.dl-horizontal
+              dt Name:
+              dd#profileUsername
+              dt Bio:
+              dd#profileUserBio
+      .col-md-9
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title Collection
+          #profileCollectionPanel.panel-body
+            ul#profileCollectionTabs.nav.nav-tabs(role='tablist')
+              li#profileCollectedTab.tab(role='presentation' data-type='Collected')
+                a(href='#') Collected
+              li#profileWantedTab.tab(role='presentation' data-type='Wanted')
+                a(href='#') Wanted
+              li#profileFavoriteTab.tab(role='presentation' data-type='Favorite')
+                a(href='#') Favorites
+            #profileCollectedContent.profileCollectionContent
+            #profileWantedContent.profileCollectionContent.hidden
+            #profileFavoriteContent.profileCollectionContent.hidden
+
+
+
+
           
 
 block append scripts
+  script(src='/js/templates/placeHolderShellThumbnail.js')
   script(src='/js/profileUI.js')

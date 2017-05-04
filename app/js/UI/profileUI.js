@@ -1,9 +1,13 @@
 const commonUI = require('./commonUI');
 const auth = require('../auth');
 const userLib = require('../user');
+const collection = require('../collection');
+const tamagotchi = require('../tamagotchi');
+const util = require('../util');
 
 $(() => {
   commonUI.bindEvents();
+  bindEvents();
 
   auth.addAuthStateListener(commonUI.authStateListener);
 
@@ -36,6 +40,80 @@ function loadUser() {
        */
     }
   });
+
+  collection.listenOnUserCollection(userId, (collectionSnapshot) => {
+    const userCollection = collectionSnapshot.val();
+
+    showCollection(userCollection);
+  });
+}
+
+function showCollection(userCollection) {
+  // Contains the html for the collected, wanted and favorite tab.
+  const html = {
+    collected: '<div class="row">',
+    wanted: '<div class="row">',
+    favorite: '<div class="row">',
+  };
+
+  /* Cycle throuh the collection object to find all shells
+   * a user has in his collection.
+   */
+  util.cycleObjectProperties(userCollection, (versionId, version) => {
+    util.cycleObjectProperties(version, (releaseId, release) => {
+      util.cycleObjectProperties(release, (shellId, shellStatus) => {
+        const shellData = {
+          shellId,
+        };
+
+        /* The shellStatus object has optional keys
+         * - collected
+         * - wanted
+         * - favorite
+         * which indicate that the shell is in the respective collection group.
+         * Cycle through it and add the thumbnail templates in the appropiated
+         * html strings.
+         */
+        util.cycleObjectProperties(shellStatus, (collectionType) => {
+          // Display a placeholder and update it once getShell resolves.
+          shellData.type = collectionType;
+          html[collectionType] += placeholdershellthumbnailTemplate(shellData);
+
+
+          tamagotchi.getShell(releaseId, shellId, (shellSnapshot) => {
+            const shell = shellSnapshot.val();
+
+            $(`#shellImg${collectionType}${shellId}`).attr('src', shell.thumbnail);
+          });
+        });
+      });
+    });
+  });
+
+  html.collected += '<div>';
+  html.wanted += '<div>';
+  html.favorite += '<div>';
+
+  $('#profileCollectedContent').html(html.collected);
+  $('#profileWantedContent').html(html.wanted);
+  $('#profileFavoriteContent').html(html.favorite);
+}
+
+function showCollectionTab(tab) {
+  // Mark the right tab as active.
+  $('.tab').toggleClass('active', false);
+  $(`#profile${tab}Tab`).toggleClass('active', true);
+  // Hide the content of inactive tabs and show the active tabs content
+  $('.profileCollectionContent').toggleClass('hidden', true);
+  $(`#profile${tab}Content`).toggleClass('hidden', false);
+}
+
+function onCollectionTabClick(e) {
+  e.preventDefault();
+
+  const tabType = $(this).data().type;
+
+  showCollectionTab(tabType);
 }
 
 function showUser(user) {
@@ -45,4 +123,11 @@ function showUser(user) {
   if (user.profileImg) {
     $('#profileUserImage').attr('src', user.profileImg);
   }
+}
+
+
+function bindEvents() {
+  $('#profileCollectedTab').on('click', onCollectionTabClick);
+  $('#profileWantedTab').on('click', onCollectionTabClick);
+  $('#profileFavoriteTab').on('click', onCollectionTabClick);
 }
