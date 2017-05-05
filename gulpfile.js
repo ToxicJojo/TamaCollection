@@ -15,6 +15,14 @@ gulp.task('pugClient', () => {
   exec('pug -c --name-after-file --no-debug app/templates/client -o public/js/templates');
 });
 
+gulp.task('bootstrap-material', () => {
+  gulp.src('node_modules/bootstrap-material-design/dist/js/*.min.js')
+    .pipe(gulp.dest('public/js/vendor/'));
+
+  gulp.src('node_modules/bootstrap-material-design/dist/css/*.min.css')
+    .pipe(gulp.dest('public/css/vendor/'));
+});
+
 // Applies browserify, babel and uglifies the results.
 // The resulting files are written to public/js.
 gulp.task('javascript', () => {
@@ -47,6 +55,6 @@ gulp.task('develop', () => {
   exec('firebase serve');
 });
 
-gulp.task('deploy', ['javascript', 'pug', 'pugClient'], () => {
+gulp.task('deploy', ['javascript', 'pug', 'pugClient', 'bootstrap-material'], () => {
   exec('firebase deploy');
 });
