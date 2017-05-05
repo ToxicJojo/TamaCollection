@@ -142,6 +142,8 @@ function showVersions() {
   util.cycleObjectProperties(versions, (versionId, version) => {
     const versionData = version;
     versionData.id = versionId;
+    // Multiple shorthands are seperated by a ';'. Only show the first one.
+    versionData.shorthand = version.shorthand.split(';')[0];
 
     const templateData = {
       version: versionData,
