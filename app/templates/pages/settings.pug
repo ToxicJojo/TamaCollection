@@ -15,49 +15,54 @@ block content
                 a(href='#') Account
       #profileTab
         .col-md-6#profileCol
-          h2 Profile
-          hr
-          #updateProfileAlert.alert.alert-success.hidden(role='alert')
-            span#updateProfileErrorMessage Profile updated.
-          form
-            fieldset
-              .form-group#formGroupSettingsUsername
-                label(for='inputUsernameSettings') Username
-                input#inputUsernameSettings.form-control
-                span#helpBlockSettingsUsername.help-block.hidden This username is already taken.
-              .form-group#formGroupSettingsBio
-                label(for='textareaBioSettings') Bio
-                textarea#textareaBioSettings.form-control(rows='3')
-                span#helpBlockSettingsBio.help-block.hidden Your bio may only be 300 characters long.
-              
-              br
-              h4 Social
-              .help-block Link your social media accounts.
-              hr
-              .form-group#formGroupSettingsInstagram
-                label(for='inputUsernameSettings') Instagram
-                input#inputInstagramSettings.form-control(placeholder='Your instagram username.')
-                span#helpBlockSettingsInstagram.help-block.hidden Please enter a valid Instagram profile.
-              .form-group#formGroupSettingsFacebook
-                label(for='inputFacebookSettings') Facebook
-                input#inputFacebookSettings.form-control(placeholder='Your Facebook profile link.')
-                span#helpBlockSettingsFacebook.help-block.hidden Please enter a valid Facebook profile.
-              .form-group#formGroupSettingsTwitter
-                label(for='inputTwitterSettings') Twitter
-                input#inputTwitterSettings.form-control(placeholder='Your twitter username.')
-                span#helpBlockSettingsTwitter.help-block.hidden Please enter a valid Twitter profile.
-              
-              .form-group
-                button#buttonUpdateProfile.btn.btn-primary.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Profile
+          .well
+            #updateProfileAlert.alert.alert-success.hidden(role='alert')
+              span#updateProfileErrorMessage Profile updated.
+            form
+              fieldset
+                legend Profile
+                
+                .form-group.label-floating#formGroupSettingsUsername
+                  label.control-label(for='inputUsernameSettings') Username
+                  input#inputUsernameSettings.form-control(type='text')
+                  span#helpBlockSettingsUsername.help-block.hidden This username is already taken.
+                .form-group.label-floating#formGroupSettingsBio
+                  label.control-label(for='textareaBioSettings') Bio
+                  textarea#textareaBioSettings.form-control(rows='3')
+                  span#helpBlockSettingsBio.help-block.hidden Your bio may only be 300 characters long.
+                
+                br
+                legend Social
+                .help-block Link your social media accounts.
+                .form-group.label-floating#formGroupSettingsInstagram
+                  label.control-label(for='inputUsernameSettings') Instagram
+                  input#inputInstagramSettings.form-control
+                  span#helpBlockSettingsInstagram.help-block Your Instagram username.
+                .form-group.label-floating#formGroupSettingsFacebook
+                  label.control-label(for='inputFacebookSettings') Facebook
+                  input#inputFacebookSettings.form-control
+                  span#helpBlockSettingsFacebook.help-block Your Facebook profile link.
+                .form-group.label-floating#formGroupSettingsTwitter
+                  label.control-label(for='inputTwitterSettings') Twitter
+                  input#inputTwitterSettings.form-control
+                  span#helpBlockSettingsTwitter.help-block Your Twitter username.
+                
+                .form-group
+                  button#buttonUpdateProfile.btn.btn-primary.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Profile
         .col-md-3
           label Profile Picture
           img#imgProfilePicture.img-responsive(src='/img/profile_pic.png')
           center
-            .form-group#formGroupSettingsProfilePicture
+            #formGroupSettingsProfilePicture.form-group
               input#inputFileProfilePicture(type='file')
-              span#helpBlockSettingsProfilePicture.help-block.hidden Please choose a file first
-              br
-              button#buttonUploadPicture.btn.btn-default(type='button' data-loading-text='Uploading <i class="fa fa-spinner fa-spin"></i>') Upload Picture
+              .input-group
+                input#inputFileProfilePicture.form-control(type='text', readonly='', placeholder='Choose a profile picture')
+                span#helpBlockSettingsProfilePicture.help-block.hidden Please choose a file first
+                span.input-group-btn.input-group-sm
+                  button.btn.btn-fab.btn-fab-mini(type='button')
+                    i.material-icons attach_file
+                    
+            button#buttonUploadPicture.btn.btn-default(type='button' data-loading-text='Uploading <i class="fa fa-spinner fa-spin"></i>') Upload Picture
       #accountTab.hidden
         .col-md-9
           h2 Account

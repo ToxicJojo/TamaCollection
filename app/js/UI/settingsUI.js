@@ -25,12 +25,20 @@ function showUser(userSnapshot) {
   oldUsername = user.username;
 
   $('#inputUsernameSettings').val(user.username);
+  $('#inputUsernameSettings').change();
+
   $('#textareaBioSettings').val(user.bio);
+  $('#textareaBioSettings').change();
 
   if (user.social) {
     $('#inputInstagramSettings').val(user.social.instagram);
+    $('#inputInstagramSettings').change();
+
     $('#inputFacebookSettings').val(user.social.facebook);
+    $('#inputFacebookSettings').change();
+
     $('#inputTwitterSettings').val(user.social.twitter);
+    $('#inputTwitterSettings').change();
   }
 
   if (user.profileImg) {
@@ -125,6 +133,7 @@ function profileUpdateSuccessCallback() {
 }
 
 function showInputError(group) {
+  $(`#formGroupSettings${group}`).toggleClass('is-focused')
   $(`#formGroupSettings${group}`).toggleClass('has-error', true);
   $(`#helpBlockSettings${group}`).toggleClass('hidden', false);
 }
