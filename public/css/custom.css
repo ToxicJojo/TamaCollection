@@ -5,3 +5,27 @@
 .list-group-item.active>.badge, .nav-pills>.active>a>.badge {
   color: #009688;
 }
+
+.btn.btn-fab, .btn.btn-fab.btn-default.btn-facebook {
+ background-color: #3b5998;
+}
+
+.btn.btn-fab, .btn.btn-fab.btn-default.btn-facebook:hover {
+ background-color: #2d4373;
+}
+
+.btn.btn-fab, .btn.btn-fab.btn-default.btn-twitter {
+  background-color: #55acee;
+}
+
+.btn.btn-fab, .btn.btn-fab.btn-default.btn-twitter:hover {
+  background-color: #2795e9;
+}
+
+.btn.btn-fab, .btn.btn-fab.btn-default.btn-instagram {
+ background-color: #3f729b;
+}
+
+.btn.btn-fab, .btn.btn-fab.btn-default.btn-instagram:hover {
+ background-color: #305777;
+}
