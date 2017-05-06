@@ -1,0 +1,7 @@
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+  background-color: #009688;
+}
+
+.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
+  color: #009688;
+}
