@@ -80,6 +80,7 @@ function clearInputError(group) {
 
 // Shows the error message for a specific formGroup.
 function showInputError(group) {
+  $(`#formGroup${group}`).toggleClass('is-focused', true);
   $(`#formGroup${group}`).toggleClass('has-error', true);
   $(`#helpBlock${group}`).toggleClass('hidden', false);
 }

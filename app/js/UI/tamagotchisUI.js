@@ -16,9 +16,6 @@ $(() => {
   loadVersions();
 });
 
- // Functions to read values from the current url.
- // The versionId, releaseId and shellId are saved in the url to allow users
- // to send links that directily display a version/release/shell.
 
 // Version
 
@@ -29,7 +26,9 @@ let shells = {};
 // The default path.
 const oldPath = ['', 'tamagotchis'];
 
-
+// Functions to read values from the current url.
+// The versionId, releaseId and shellId are saved in the url to allow users
+// to send links that directily display a version/release/shell.
 function getCurrentVersionId() {
   // The path looks like /tamagotchis/$versionId
   const path = window.location.pathname.split('/');
@@ -121,7 +120,7 @@ function handleLocationChange() {
 
 // Gets a snapshot of the versions from the database and saves it in 'versions'.
 function loadVersions() {
-  commonUI.showLoadingSpinner('#versionNav');
+  commonUI.showLoadingSpinner('#versionSelect');
 
   tamagotchi.getVersions((versionSnapshot) => {
     versions = versionSnapshot.val();
@@ -134,27 +133,16 @@ function loadVersions() {
 
 // Shows the list of versions in the righthand menue.
 function showVersions() {
-  const versionNav = $('#versionNav');
+  const versionSelect = $('#versionSelect');
 
   // Reset the old versionlist.
-  versionNav.html('');
+  versionSelect.html('<option selected disabled val="">Select a Version</option>');
 
   util.cycleObjectProperties(versions, (versionId, version) => {
-    const versionData = version;
-    versionData.id = versionId;
-    // Multiple shorthands are seperated by a ';'. Only show the first one.
-    versionData.shorthand = version.shorthand.split(';')[0];
-
-    const templateData = {
-      version: versionData,
-    };
-
-    versionNav.append(versionlistTemplate(templateData));
+    versionSelect.append(`<option value="${versionId}">${version.name}</option>`);
   });
 
-  versionNav.LoadingOverlay('hide');
-
-  $('.version-nav-li').on('click', versionNavClickHandler);
+  versionSelect.LoadingOverlay('hide');
 }
 
 function showVersion(version) {
@@ -166,10 +154,10 @@ function showVersion(version) {
 }
 
 
-function versionNavClickHandler(e) {
+function changeVersion(e) {
   e.preventDefault();
 
-  const versionId = $(this).data().versionid;
+  const versionId = $(this).val();
 
   history.pushState({}, '', `/tamagotchis/${versionId}`);
 
@@ -180,8 +168,7 @@ function versionNavClickHandler(e) {
 function handleVersionChange() {
   const versionId = getCurrentVersionId();
 
-  $('.version-nav-li').toggleClass('active', false);
-  $(`#versionNav${versionId}`).toggleClass('active', true);
+  $('#versionSelect').val(versionId);
 
   showVersion(getCurrentVersion());
   loadReleases(versionId);
@@ -220,6 +207,7 @@ function showReleases() {
   releaseNav.LoadingOverlay('hide');
 
   $('.tab').on('click', releaseNavClickHandler);
+  releaseNav.children()[0].click();
 }
 
 function handleReleaseChange() {
@@ -479,4 +467,6 @@ function bindEvents() {
   $('#buttonRemoveFromWanted').on('click', removeFromWantedClickHandler);
   $('#buttonAddToFavorite').on('click', addToFavoriteClickHandler);
   $('#buttonRemoveFromFavorite').on('click', removeFromFavoriteClickHandler);
+
+  $('#versionSelect').on('change', changeVersion);
 }
