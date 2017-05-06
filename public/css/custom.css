@@ -29,3 +29,11 @@
 .btn.btn-fab, .btn.btn-fab.btn-default.btn-instagram:hover {
  background-color: #305777;
 }
+
+.dl-horizontal dt {
+  width: 20%;
+}
+
+.dl-horizontal dd {
+  margin-left: 25%;
+}
