@@ -1,5 +1,6 @@
 // User interface for the header.
 const auth = require('../auth');
+const userLib = require('../user');
 
 // Hides the user dropdown in the top right.
 function hideUserInfo() {
@@ -40,8 +41,9 @@ function gotoUserProfile(e) {
   e.preventDefault();
 
   const uid = firebase.auth().currentUser.uid;
-
-  window.location = `/profile/${uid}`;
+  userLib.getUser(uid, (userSnapshot) => {
+    window.location = `/profile/${userSnapshot.val().username}`;
+  });
 }
 
 function bindEvents() {

@@ -17,34 +17,37 @@ $(() => {
 });
 
 
-function getUserId() {
+function getUserId(callback) {
   // The path looks like /profile/$uid
   const path = window.location.pathname.split('/');
+  const username = path[2];
 
-  return path[2];
+  userLib.getUserIdFromName(username, callback);
 }
 
 function loadUser() {
-  const userId = getUserId();
   commonUI.showLoadingSpinner('#profileInfoPanel');
+  getUserId((userIdSnapshot) => {
+    const userId = userIdSnapshot.val();
 
-  userLib.getUser(userId, (userSnapshot) => {
-    const user = userSnapshot.val();
+    userLib.getUser(userId, (userSnapshot) => {
+      const user = userSnapshot.val();
 
-    if (user) {
-      showUser(user);
-      commonUI.hideLoadingSpinner('#profileInfoPanel');
-    } else {
-      /* TODO User does not exists or got deleted
-       * Display a error to the user
-       */
-    }
-  });
+      if (user) {
+        showUser(user);
+        commonUI.hideLoadingSpinner('#profileInfoPanel');
+      } else {
+        /* TODO User does not exists or got deleted
+         * Display a error to the user
+         */
+      }
+    });
 
-  collection.listenOnUserCollection(userId, (collectionSnapshot) => {
-    const userCollection = collectionSnapshot.val();
+    collection.listenOnUserCollection(userId, (collectionSnapshot) => {
+      const userCollection = collectionSnapshot.val();
 
-    showCollection(userCollection);
+      showCollection(userCollection);
+    });
   });
 }
 

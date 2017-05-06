@@ -19,6 +19,11 @@ function getUser(uid, successCallback, errorCallback) {
   firebase.database().ref(`/users/${uid}/`).once('value', successCallback, errorCallback);
 }
 
+function getUserIdFromName(name, successCallback) {
+  firebase.database().ref(`/usernames/${name}`).once('value', successCallback);
+}
+
 exports.updateUserData = updateUserData;
 exports.updateProfilePicture = updateProfilePicture;
 exports.getUser = getUser;
+exports.getUserIdFromName = getUserIdFromName;
