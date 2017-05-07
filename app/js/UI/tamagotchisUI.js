@@ -173,6 +173,7 @@ function handleVersionChange() {
 
   showVersion(getCurrentVersion());
   loadReleases(versionId);
+  loadComments();
 }
 
 function loadReleases(versionId) {
@@ -208,7 +209,9 @@ function showReleases() {
   releaseNav.LoadingOverlay('hide');
 
   $('.tab').on('click', releaseNavClickHandler);
-  releaseNav.children()[0].click();
+  if (releaseNav.children()[0]) {
+    releaseNav.children()[0].click();
+  }
 }
 
 function handleReleaseChange() {
@@ -472,6 +475,21 @@ function postVersionCommentClick(e) {
   }
 }
 
+function loadComments() {
+  const commentDiv = $('#commentDiv');
+
+  commentDiv.html('');
+
+  comments.listenOnComments(getCurrentVersionId(), (commentSnapshot) => {
+    const commentData = {
+      comment: commentSnapshot.val(),
+      id: commentSnapshot.key,
+    };
+
+
+    commentDiv.append(commentTemplate(commentData));
+  });
+}
 
 function bindEvents() {
   window.onpopstate = handleLocationChange;

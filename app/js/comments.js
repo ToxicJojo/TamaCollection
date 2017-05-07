@@ -1,3 +1,5 @@
+const util = require('./util');
+
 function postVersionComment(versionId, comment, successCallback) {
   const database = firebase.database();
 
@@ -23,5 +25,13 @@ function postVersionComment(versionId, comment, successCallback) {
     .then(successCallback);
 }
 
+function listenOnComments(versionId, successCallback) {
+  firebase.database().ref(`/versions/${versionId}/comments`).on('value', (commentListSnapshot) => {
+    util.cycleObjectProperties(commentListSnapshot.val(), (commentId) => {
+      firebase.database().ref(`/versionComments/${commentId}`).once('value', successCallback);
+    });
+  });
+}
 
 exports.postVersionComment = postVersionComment;
+exports.listenOnComments = listenOnComments;
