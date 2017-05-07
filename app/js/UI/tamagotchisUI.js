@@ -3,6 +3,7 @@ const auth = require('../auth');
 const tamagotchi = require('../tamagotchi');
 const util = require('../util');
 const collection = require('../collection');
+const comments = require('../comments');
 
 $(() => {
   commonUI.bindEvents();
@@ -458,6 +459,19 @@ function authStateListener(user) {
   }
 }
 
+function postVersionCommentClick(e) {
+  e.preventDefault();
+
+  const commentText = $('#versionCommentTextarea').val();
+
+  if (commentText !== '') {
+    $('#buttonCommentVersion').button('loading');
+    comments.postVersionComment(getCurrentVersionId(), commentText, () => {
+      $('#buttonCommentVersion').button('reset');
+    });
+  }
+}
+
 
 function bindEvents() {
   window.onpopstate = handleLocationChange;
@@ -467,6 +481,8 @@ function bindEvents() {
   $('#buttonRemoveFromWanted').on('click', removeFromWantedClickHandler);
   $('#buttonAddToFavorite').on('click', addToFavoriteClickHandler);
   $('#buttonRemoveFromFavorite').on('click', removeFromFavoriteClickHandler);
+
+  $('#buttonCommentVersion').on('click', postVersionCommentClick);
 
   $('#versionSelect').on('change', changeVersion);
 }
