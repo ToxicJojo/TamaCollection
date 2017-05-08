@@ -152,6 +152,8 @@ function showVersion(version) {
   $('#versionInfoDescription').html(version.description);
   $('#versionInfoShorthand').html(version.shorthand);
 
+  $('#versionInfoPanel').toggleClass('hidden', false);
+
   hideRelease();
 }
 
@@ -171,6 +173,11 @@ function handleVersionChange() {
   const versionId = getCurrentVersionId();
 
   $('#versionSelect').val(versionId);
+
+  $('#emptyReleases').toggleClass('hidden', true);
+  $('#emptyShells').toggleClass('hidden', true);
+  $('#emptyVersion').toggleClass('hidden', true);
+  $('#commentRow').toggleClass('hidden', false);
 
   showVersion(getCurrentVersion());
   loadReleases(versionId);
@@ -195,17 +202,23 @@ function showReleases() {
   const releaseContent = $('#releaseContent');
   releaseContent.html('');
 
-  util.cycleObjectProperties(releases, (releaseId, release) => {
-    const releaseData = release;
-    releaseData.id = releaseId;
+  // Check if there are releases for the version.
+  if (releases) {
+    util.cycleObjectProperties(releases, (releaseId, release) => {
+      const releaseData = release;
+      releaseData.id = releaseId;
 
-    const templateData = {
-      release: releaseData,
-    };
+      const templateData = {
+        release: releaseData,
+      };
 
-    releaseNav.append(releasetabTemplate(templateData));
-    releaseContent.append(releasetabcontentTemplate(templateData));
-  });
+      releaseNav.append(releasetabTemplate(templateData));
+      releaseContent.append(releasetabcontentTemplate(templateData));
+    });
+  } else {
+    // If there are no releases show the empty state.
+    $('#emptyReleases').toggleClass('hidden', false);
+  }
 
   releaseNav.LoadingOverlay('hide');
 
@@ -223,6 +236,8 @@ function handleReleaseChange() {
 
   $('.release-content').toggleClass('hidden', true);
   $(`#releaseContent${releaseId}`).toggleClass('hidden', false);
+
+  $('#emptyShells').toggleClass('hidden', true);
 
   showRelease(getCurrentRelease());
   loadShells(getCurrentReleaseId());
@@ -266,21 +281,25 @@ function showShells() {
 
   releaseContent.html('');
 
-  let html = '<div class="row">';
+  if (shells) {
+    let html = '<div class="row">';
 
-  util.cycleObjectProperties(shells, (shellId, shell) => {
-    const shellData = shell;
-    shellData.id = shellId;
+    util.cycleObjectProperties(shells, (shellId, shell) => {
+      const shellData = shell;
+      shellData.id = shellId;
 
-    const templateData = {
-      shell: shellData,
-    };
+      const templateData = {
+        shell: shellData,
+      };
 
-    html += (shellthumbnailTemplate(templateData));
-  });
+      html += (shellthumbnailTemplate(templateData));
+    });
 
-  html += '</div>';
-  releaseContent.html(html);
+    html += '</div>';
+    releaseContent.html(html);
+  } else {
+    $('#emptyShells').toggleClass('hidden', false);
+  }
 
   $('#releaseContent').LoadingOverlay('hide');
 
@@ -321,6 +340,7 @@ function showShell(shell) {
 function hideShell() {
   $('#shellInfo').toggleClass('hidden', true);
   $('#collectionStatus').toggleClass('hidden', true);
+  $('#shellImage').attr('src', '/img/sampleShell.jpg');
 }
 
 

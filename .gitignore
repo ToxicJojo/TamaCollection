@@ -7,3 +7,5 @@ firebase-debug.log
 public/js
 public/**/*.html
 public/css/vendor
+
+/images

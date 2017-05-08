@@ -9,15 +9,29 @@ block content
             h3.panel-title Version
           .panel-body
             select#versionSelect.form-control
-
+              
+            #emptyReleases.hidden
+              img.img-responsive(src='/img/emptyStates/sadTama.png')
+              p.text-muted
+                strong There are no releases for this version yet.
             ul#releaseNav.nav.nav-pills(role='tablist')
             #releaseContent.tab-content
+            
+            #emptyShells.hidden
+              img.img-responsive(src='/img/emptyStates/sadTama2.png')
+              p.text-muted
+                strong There are no shells for this release yet.
 
 
       .col-md-7
         .row
           .col-md-12
-            .panel.panel-default
+            #emptyVersion
+              center
+                img.img-responsive(src='/img/emptyStates/turtle.png')
+                p.text-muted
+                  strong Select a version on the left to get started.
+            #versionInfoPanel.panel.panel-default.hidden
               .panel-body
                 .row
                   .col-md-5
@@ -81,7 +95,7 @@ block content
                         dt Color:
                         dd#shellInfoColor Pink
                         
-        .row
+        #commentRow.row.hidden
           .col-md-12
             form
               .form-group.label-floating
