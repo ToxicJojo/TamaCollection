@@ -516,6 +516,7 @@ function loadComments() {
     userLib.getUser(comment.owner, (userSnapshot) => {
       const user = userSnapshot.val();
       $(`#commentPicture${commentId}`).attr('src', user.profileImg);
+      $(`#commentUserLink${commentId}`).attr('href', `/profile/${user.username}`);
       $(`#commentUsername${commentId}`).text(user.username);
     });
   });
