@@ -223,7 +223,9 @@ function showReleases() {
   releaseNav.LoadingOverlay('hide');
 
   $('.tab').on('click', releaseNavClickHandler);
-  if (releaseNav.children()[0]) {
+
+  // Only open the first release if no release is present in the url.
+  if (releaseNav.children()[0] && !getCurrentReleaseId()) {
     releaseNav.children()[0].click();
   }
 }

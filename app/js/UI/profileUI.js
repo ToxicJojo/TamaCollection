@@ -73,6 +73,8 @@ function showCollection(userCollection) {
     util.cycleObjectProperties(version, (releaseId, release) => {
       util.cycleObjectProperties(release, (shellId, shellStatus) => {
         const shellData = {
+          versionId,
+          releaseId,
           shellId,
         };
 

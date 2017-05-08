@@ -1,5 +1,5 @@
 .col-md-3
-  a.thumbnail.shellThumbnail(href='#' id='shell' + type + shellId data-type + shellId=type + shellId)
+  a.thumbnail.shellThumbnail(href=`/tamagotchis/${versionId}/${releaseId}/${shellId}` id='shell' + type + shellId data-type + shellId=type + shellId)
     img(src='/img/sampleShell.jpg' id='shellImg' + type + shellId)
     span.label.label-success.thumbnail-label.invisible(id='labelCollected' + type + shellId)
       i.fa.fa-book.fa-lg
