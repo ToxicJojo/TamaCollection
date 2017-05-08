@@ -14,16 +14,16 @@ block content
             hr
             .row
               .col-md-4
-                a#profileSocialInstagram.btn.btn-default.btn-fab.btn-instagram.hidden
+                a#profileSocialInstagram.btn.btn-default.btn-fab.btn-instagram.hidden(target='blank')
                   i.fa.fa-fw.fa-instagram.material-icons
               .col-md-4
-                a#profileSocialFacebook.btn.btn-default.btn-fab.btn-facebook.hidden
+                a#profileSocialFacebook.btn.btn-default.btn-fab.btn-facebook.hidden(target='blank')
                   i.fa.fa-fw.fa-facebook.material-icons
               .col-md-4
-                a#profileSocialTwitter.btn.btn-default.btn-fab.btn-twitter.hidden
+                a#profileSocialTwitter.btn.btn-default.btn-fab.btn-twitter.hidden(target='blank')
                   i.fa.fa-fw.fa-twitter.material-icons
-                    
-            
+
+
             dl.dl-horizontal
               dt Name:
               dd#profileUsername
@@ -36,13 +36,13 @@ block content
           #profileCollectionPanel.panel-body
             ul#profileCollectionTabs.nav.nav-pills(role='tablist')
               li#profileCollectedTab.tab.active(role='presentation' data-type='Collected')
-                a(href='#') Collected 
+                a(href='#') Collected
                   span#profileCollectedCount.badge 0
               li#profileWantedTab.tab(role='presentation' data-type='Wanted')
-                a(href='#') Wanted 
+                a(href='#') Wanted
                   span#profileWantedCount.badge 0
               li#profileFavoriteTab.tab(role='presentation' data-type='Favorite')
-                a(href='#') Favorites 
+                a(href='#') Favorites
                   span#profileFavoriteCount.badge 0
             #profileCollectedContent.profileCollectionContent
             #profileWantedContent.profileCollectionContent.hidden
@@ -51,7 +51,7 @@ block content
 
 
 
-          
+
 
 block append scripts
   script(src='/js/templates/placeHolderShellThumbnail.js')
