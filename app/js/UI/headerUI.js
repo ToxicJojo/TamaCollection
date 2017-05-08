@@ -28,6 +28,7 @@ function showUser(userSnapshot) {
   const user = userSnapshot.val();
 
   $('#headerUserName').text(user.username);
+  $('#headerGotoProfile').attr('href', `/profile/${user.username}`);
 
   if (user.profileImg) {
     $('#imgHeaderProfilePicture').attr('src', user.profileImg);
@@ -37,18 +38,8 @@ function showUser(userSnapshot) {
   showUserInfo();
 }
 
-function gotoUserProfile(e) {
-  e.preventDefault();
-
-  const uid = firebase.auth().currentUser.uid;
-  userLib.getUser(uid, (userSnapshot) => {
-    window.location = `/profile/${userSnapshot.val().username}`;
-  });
-}
-
 function bindEvents() {
   $('#headerSignOut').on('click', auth.signOut);
-  $('#headerGotoProfile').on('click', gotoUserProfile);
 }
 
 function authStateListener(user) {
