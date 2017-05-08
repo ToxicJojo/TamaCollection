@@ -25,10 +25,11 @@ function postVersionComment(versionId, comment, successCallback) {
     .then(successCallback);
 }
 
-function listenOnComments(versionId, successCallback) {
+function listenOnComments(versionId, commentsChangeCallback, singleCommentCallback) {
   firebase.database().ref(`/versions/${versionId}/comments`).on('value', (commentListSnapshot) => {
+    commentsChangeCallback();
     util.cycleObjectProperties(commentListSnapshot.val(), (commentId) => {
-      firebase.database().ref(`/versionComments/${commentId}`).once('value', successCallback);
+      firebase.database().ref(`/versionComments/${commentId}`).once('value', singleCommentCallback);
     });
   });
 }

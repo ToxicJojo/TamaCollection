@@ -4,6 +4,7 @@ const tamagotchi = require('../tamagotchi');
 const util = require('../util');
 const collection = require('../collection');
 const comments = require('../comments');
+const userLib = require('../user');
 
 $(() => {
   commonUI.bindEvents();
@@ -469,6 +470,7 @@ function postVersionCommentClick(e) {
 
   if (commentText !== '') {
     $('#buttonCommentVersion').button('loading');
+    $('#versionCommentTextarea').val('');
     comments.postVersionComment(getCurrentVersionId(), commentText, () => {
       $('#buttonCommentVersion').button('reset');
     });
@@ -478,16 +480,24 @@ function postVersionCommentClick(e) {
 function loadComments() {
   const commentDiv = $('#commentDiv');
 
-  commentDiv.html('');
+  comments.listenOnComments(getCurrentVersionId(), () => {
+    commentDiv.html('');
+  }, (commentSnapshot) => {
+    const comment = commentSnapshot.val();
+    const commentId = commentSnapshot.key;
 
-  comments.listenOnComments(getCurrentVersionId(), (commentSnapshot) => {
     const commentData = {
-      comment: commentSnapshot.val(),
-      id: commentSnapshot.key,
+      comment,
+      id: commentId,
     };
 
-
     commentDiv.append(commentTemplate(commentData));
+
+    userLib.getUser(comment.owner, (userSnapshot) => {
+      const user = userSnapshot.val();
+      $(`#commentPicture${commentId}`).attr('src', user.profileImg);
+      $(`#commentUsername${commentId}`).text(user.username);
+    });
   });
 }
 
