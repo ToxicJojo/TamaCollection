@@ -114,14 +114,15 @@ function uploadProfilePicture(e) {
 
   const file = document.getElementById('inputFileProfilePicture').files[0];
 
-  if (file) {
+  // Check if a file was selcted and it is a valid image file.
+  if (file && validator.validateImage(file)) {
     clearInputError('ProfilePicture');
+
     userLib.updateProfilePicture(file, () => {
       $('#buttonUploadPicture').button('reset');
     });
   } else {
     showInputError('ProfilePicture');
-
     $('#buttonUploadPicture').button('reset');
   }
 }
@@ -133,7 +134,7 @@ function profileUpdateSuccessCallback() {
 }
 
 function showInputError(group) {
-  $(`#formGroupSettings${group}`).toggleClass('is-focused')
+  $(`#formGroupSettings${group}`).toggleClass('is-focused');
   $(`#formGroupSettings${group}`).toggleClass('has-error', true);
   $(`#helpBlockSettings${group}`).toggleClass('hidden', false);
 }

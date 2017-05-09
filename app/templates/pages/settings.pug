@@ -21,7 +21,7 @@ block content
             form
               fieldset
                 legend Profile
-                
+
                 .form-group.label-floating#formGroupSettingsUsername
                   label.control-label(for='inputUsernameSettings') Username
                   input#inputUsernameSettings.form-control(type='text')
@@ -30,7 +30,7 @@ block content
                   label.control-label(for='textareaBioSettings') Bio
                   textarea#textareaBioSettings.form-control(rows='3')
                   span#helpBlockSettingsBio.help-block.hidden Your bio may only be 300 characters long.
-                
+
                 br
                 legend Social
                 .help-block Link your social media accounts.
@@ -46,7 +46,7 @@ block content
                   label.control-label(for='inputTwitterSettings') Twitter
                   input#inputTwitterSettings.form-control
                   span#helpBlockSettingsTwitter.help-block Your Twitter username.
-                
+
                 .form-group
                   button#buttonUpdateProfile.btn.btn-primary.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Profile
         .col-md-3
@@ -54,14 +54,14 @@ block content
           img#imgProfilePicture.img-responsive(src='/img/profile_pic.png')
           center
             #formGroupSettingsProfilePicture.form-group
-              input#inputFileProfilePicture(type='file')
+              input#inputFileProfilePicture(type='file' accept='image/jpeg, image/png')
               .input-group
                 input#inputFileProfilePicture.form-control(type='text', readonly='', placeholder='Choose a profile picture')
-                span#helpBlockSettingsProfilePicture.help-block.hidden Please choose a file first
+                span#helpBlockSettingsProfilePicture.help-block.hidden Please choose a file PNG or JPEG file that is smaller than 5MB.
                 span.input-group-btn.input-group-sm
                   button.btn.btn-fab.btn-fab-mini(type='button')
                     i.material-icons attach_file
-                    
+
             button#buttonUploadPicture.btn.btn-default(type='button' data-loading-text='Uploading <i class="fa fa-spinner fa-spin"></i>') Upload Picture
       #accountTab.hidden
         .col-md-9
