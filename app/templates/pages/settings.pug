@@ -31,12 +31,11 @@ block content
                   textarea#textareaBioSettings.form-control(rows='3')
                   span#helpBlockSettingsBio.help-block.hidden Your bio may only be 300 characters long.
 
-                br
                 legend Social
                 .help-block Link your social media accounts.
                 .form-group.label-floating#formGroupSettingsInstagram
                   label.control-label(for='inputUsernameSettings') Instagram
-                  input#inputInstagramSettings.form-control
+                  input#inputInstagramSettings.form-control(type='text')
                   span#helpBlockSettingsInstagram.help-block Your Instagram username.
                 .form-group.label-floating#formGroupSettingsFacebook
                   label.control-label(for='inputFacebookSettings') Facebook
@@ -46,6 +45,14 @@ block content
                   label.control-label(for='inputTwitterSettings') Twitter
                   input#inputTwitterSettings.form-control
                   span#helpBlockSettingsTwitter.help-block Your Twitter username.
+
+              legend Privacy
+              .form-group
+                .checkbox
+                  label
+                    input#inputPrivateCollection(type='checkbox')
+                    |  Private Collection
+                p.help-block Keep my collection private. Other users won't be able to see it.
 
                 .form-group
                   button#buttonUpdateProfile.btn.btn-primary.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Update Profile

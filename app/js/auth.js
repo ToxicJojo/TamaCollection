@@ -9,8 +9,13 @@ function createNewAccount(username, email, password, errorCallback) {
       const database = firebase.database();
 
       const updates = {};
+
+      const userData = {
+        username,
+        privateCollection: false,
+      }
       // Save the username in /users/$UID/username
-      updates[`/users/${user.uid}`] = { username };
+      updates[`/users/${user.uid}`] = userData;
 
       database.ref().update(updates).then(() => {
         // After the account has been created switch to the welcome page.

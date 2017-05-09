@@ -41,6 +41,8 @@ function showUser(userSnapshot) {
     $('#inputTwitterSettings').change();
   }
 
+  $('#inputPrivateCollection').prop('checked', user.privateCollection);
+
   if (user.profileImg) {
     $('#imgProfilePicture').attr('src', user.profileImg);
   }
@@ -68,6 +70,9 @@ function updateProfile() {
   const instagram = $('#inputInstagramSettings').val();
   const facebook = $('#inputFacebookSettings').val();
   const twitter = $('#inputTwitterSettings').val();
+
+  // Privacy
+  const privateCollection = $('#inputPrivateCollection').prop('checked');
 
   // TODO basic validation of the social links.
   const social = {
@@ -99,6 +104,7 @@ function updateProfile() {
         username,
         bio,
         social,
+        privateCollection,
       };
 
       userLib.updateUserData(userData, profileUpdateSuccessCallback);
