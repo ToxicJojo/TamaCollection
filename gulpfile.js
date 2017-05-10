@@ -4,6 +4,8 @@ const browserify = require('gulp-browserify');
 const uglify = require('gulp-uglify');
 const babel = require('gulp-babel');
 const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
+const insert = require('gulp-insert');
 
 gulp.task('pug', () => {
   return gulp.src('app/templates/pages/**/*.pug')
@@ -12,8 +14,32 @@ gulp.task('pug', () => {
 });
 
 gulp.task('pugClient', () => {
-  exec('pug -c --name-after-file --no-debug app/templates/client -o public/js/templates');
+  execSync('pug -c --name-after-file --no-debug app/templates/client -o public/js/templates');
+
+  gulp.src('app/templates/**/*.js')
+    .pipe(insert.transform((contents) => {
+      const exportString = '\nmodule.exports = template';
+
+      return contents + exportString;
+    }))
+    .pipe(gulp.dest('app/js/templates/'));
 });
+
+
+gulp.task('pugComponents', () => {
+  return gulp.src('app/templates/client/components/**/*.pug')
+    .pipe(pug({
+      client: true,
+      compileDebug: false,
+    }))
+    .pipe(insert.transform((contents) => {
+      const exportString = '\nmodule.exports = template';
+
+      return contents + exportString;
+    }))
+    .pipe(gulp.dest('app/js/templates/'));
+});
+
 
 gulp.task('bootstrap-material', () => {
   gulp.src('node_modules/bootstrap-material-design/dist/js/*.min.js')
@@ -51,6 +77,7 @@ gulp.task('develop', () => {
   gulp.watch('app/templates/**/*.pug', ['pug']);
   gulp.watch('app/templates/client/**/*.pug', ['pugClient']);
   gulp.watch('app/js/**/*.js', ['javascript-dev']);
+  gulp.watch('app/templates/client/components/**/*.pug', ['pugComponents']);
   // Start the firebase server.
   exec('firebase serve');
 });

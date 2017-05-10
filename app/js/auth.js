@@ -1,3 +1,4 @@
+const USERNAME_ALREADY_TAKEN = 'This username is already taken.';
 // Creates a new user account, with the given username, email and password.
 // If the account creation was not successfull errorCallback will be called with
 // the returned error.
@@ -66,6 +67,8 @@ function registerAuthStateListeners() {
     }
   });
 }
+
+exports.USERNAME_ALREADY_TAKEN = USERNAME_ALREADY_TAKEN;
 
 exports.createNewAccount = createNewAccount;
 exports.signIn = signIn;

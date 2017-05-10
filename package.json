@@ -36,8 +36,10 @@
     "gulp-babel": "^6.1.2",
     "gulp-browserify": "^0.5.1",
     "gulp-changed": "^3.0.0",
+    "gulp-concat": "^2.6.1",
     "gulp-csso": "^3.0.0",
     "gulp-eslint": "^3.0.1",
+    "gulp-insert": "^0.5.0",
     "gulp-pug": "^3.3.0",
     "gulp-uglify": "^2.1.2",
     "materialize-css": "^0.98.2"
