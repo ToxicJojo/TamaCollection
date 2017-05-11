@@ -3,7 +3,9 @@ const uiHelper = require('../UIHelper');
 const validator = require('../validator');
 const auth = require('../auth');
 
-let oldUsername;
+// We need to remember the current username, so we know if the user tries
+// to change it.
+let currentUsername;
 
 const init = () => {
   uiHelper.showLoadingSpinner('#profileSettingsWell');
@@ -32,7 +34,7 @@ const showUpdateSuccessful = () => {
 
 const showUser = (userSnapshot) => {
   const user = userSnapshot.val();
-  oldUsername = user.username;
+  currentUsername = user.username;
 
   uiHelper.changeInputValue('#profileSettingsInputUsername', user.username);
   uiHelper.changeInputValue('#profileSettingsTextareaBio', user.bio);
@@ -59,7 +61,7 @@ const validateData = (userData, succesCallback, failureCallback) => {
 
   auth.isUsernameAvaiable(userData.username, (nameAvaiable) => {
     // Check if the username is avaiable, if it got changed.
-    if (!nameAvaiable && oldUsername !== userData.username) {
+    if (!nameAvaiable && currentUsername !== userData.username) {
       showInputError('Username', auth.USERNAME_ALREADY_TAKEN);
       validationSuccess = false;
     } else {

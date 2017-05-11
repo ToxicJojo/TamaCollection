@@ -18,6 +18,7 @@ $(() => {
 
 function authStateListener(user) {
   if (!user) {
+    // When not logged in go to the landing page.
     window.location = '/';
   }
 }

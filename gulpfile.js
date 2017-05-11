@@ -25,7 +25,8 @@ gulp.task('pugClient', () => {
     .pipe(gulp.dest('app/js/templates/'));
 });
 
-
+// Compile client side templates and expose the template function
+// so they can be required.
 gulp.task('pugComponents', () => {
   return gulp.src('app/templates/client/components/**/*.pug')
     .pipe(pug({
@@ -61,7 +62,7 @@ gulp.task('javascript', () => {
     .pipe(gulp.dest('public/js'));
 });
 
-// Applies browserify, babel and uglifies the results.
+// Applies browserify and babel.
 // The resulting files are written to public/js.
 gulp.task('javascript-dev', () => {
   return gulp.src('app/js/UI/*.js')
@@ -82,6 +83,6 @@ gulp.task('develop', () => {
   exec('firebase serve');
 });
 
-gulp.task('deploy', ['javascript', 'pug', 'pugClient', 'bootstrap-material'], () => {
+gulp.task('deploy', ['javascript', 'pug', 'pugClient', 'pugComponents', 'bootstrap-material'], () => {
   exec('firebase deploy');
 });
