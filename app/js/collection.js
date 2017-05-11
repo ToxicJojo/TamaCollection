@@ -93,10 +93,10 @@ function listenOnCollection(collectionListener) {
   database.ref(`/collections/${firebase.auth().currentUser.uid}`).on('value', collectionListener);
 }
 
-function listenOnUserCollection(userId, collectionListener) {
+function listenOnUserCollection(userId, collectionListener, errorCallback) {
   const database = firebase.database();
 
-  database.ref(`/collections/${userId}`).on('value', collectionListener);
+  database.ref(`/collections/${userId}`).on('value', collectionListener, errorCallback);
 }
 
 exports.addTo = addTo;

@@ -9,3 +9,5 @@ public/**/*.html
 public/css/vendor
 
 /images
+
+app/js/templates

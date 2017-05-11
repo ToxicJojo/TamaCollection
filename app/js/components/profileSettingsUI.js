@@ -1,5 +1,5 @@
 const userLib = require('../user');
-const uiHelper = require('../UIHelper');
+const uiHelper = require('../uiHelper');
 const validator = require('../validator');
 const auth = require('../auth');
 

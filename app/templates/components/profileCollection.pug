@@ -1,0 +1,23 @@
+.panel.panel-default
+  .panel-heading
+    h3.panel-title Collection
+  #profileCollectionPanelBody.panel-body
+    #profileCollectionEmptyStatePrivate.hidden
+      center
+        img.img-responsive(src='/img/emptyStates/sadTama3.png')
+        p.text-muted
+          strong This collection is private.
+    #profileCollectionContent
+      ul#profileCollectionTabs.nav.nav-pills(role='tablist')
+        li#profileCollectionCollectedTab.tab.active(role='presentation' data-type='Collected')
+          a(href='#') Collected
+            span#profileCollectionCollectedCount.badge 0
+        li#profileCollectionWantedTab.tab(role='presentation' data-type='Wanted')
+          a(href='#') Wanted
+            span#profileCollectionWantedCount.badge 0
+        li#profileCollectionFavoriteTab.tab(role='presentation' data-type='Favorite')
+          a(href='#') Favorites
+            span#profileCollectionFavoriteCount.badge 0
+      #profileCollectionCollectedContent.profileCollectionContent
+      #profileCollectionWantedContent.profileCollectionContent.hidden
+      #profileCollectionFavoriteContent.profileCollectionContent.hidden
