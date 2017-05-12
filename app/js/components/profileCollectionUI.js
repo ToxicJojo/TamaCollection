@@ -86,7 +86,7 @@ const showCollection = (collection) => {
   $('#profileCollectionFavoriteContent').html(html.favorite);
 
   // Show the collection, wanted and favorite count.
-  $('#profileColectionCollectedCount').html(count.collected);
+  $('#profileCollectionCollectedCount').html(count.collected);
   $('#profileCollectionWantedCount').html(count.wanted);
   $('#profileCollectionFavoriteCount').html(count.favorite);
 
