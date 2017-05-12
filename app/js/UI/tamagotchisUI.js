@@ -6,6 +6,8 @@ const collection = require('../collection');
 const comments = require('../comments');
 const userLib = require('../user');
 
+const versionCommentsUI = require('../components/versionCommentsUI');
+
 $(() => {
   commonUI.bindEvents();
   bindEvents();
@@ -177,7 +179,6 @@ function handleVersionChange() {
   $('#emptyReleases').toggleClass('hidden', true);
   $('#emptyShells').toggleClass('hidden', true);
   $('#emptyVersion').toggleClass('hidden', true);
-  $('#commentRow').toggleClass('hidden', false);
 
   showVersion(getCurrentVersion());
   loadReleases(versionId);
@@ -500,28 +501,8 @@ function postVersionCommentClick(e) {
 }
 
 function loadComments() {
-  const commentDiv = $('#commentDiv');
-
-  comments.listenOnComments(getCurrentVersionId(), () => {
-    commentDiv.html('');
-  }, (commentSnapshot) => {
-    const comment = commentSnapshot.val();
-    const commentId = commentSnapshot.key;
-
-    const commentData = {
-      comment,
-      id: commentId,
-    };
-
-    commentDiv.append(commentTemplate(commentData));
-
-    userLib.getUser(comment.owner, (userSnapshot) => {
-      const user = userSnapshot.val();
-      $(`#commentPicture${commentId}`).attr('src', user.profileImg);
-      $(`#commentUserLink${commentId}`).attr('href', `/profile/${user.username}`);
-      $(`#commentUsername${commentId}`).text(user.username);
-    });
-  });
+  versionCommentsUI.init();
+  versionCommentsUI.setVersionId(getCurrentVersionId());
 }
 
 function bindEvents() {

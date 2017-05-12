@@ -97,16 +97,7 @@ block content
                         dt Color:
                         dd#shellInfoColor Pink
                         
-        #commentRow.row.hidden
-          .col-md-12
-            form
-              .form-group.label-floating
-                label.control-label(for='versionCommentTextarea') Write a comment for this version
-                textarea#versionCommentTextarea.form-control(rows='3')
-              .form-group
-                button#buttonCommentVersion.btn.btn-raised.btn-primary(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>') Post
-
-        #commentDiv              
+        include ../components/versionComments.pug
         
 
 

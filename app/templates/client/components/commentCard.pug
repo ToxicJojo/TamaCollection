@@ -1,0 +1,11 @@
+.row
+  .col-md-12  
+    .well.well-sm
+      .media
+        .media-left
+          a(href='#' id='commentUserLink' + comment.id)
+            img.media-object.avatar(id='commentPicture' + comment.id src='/img/profile_pic.png' width='64px' heigth='64px')
+        .media-body
+          h4.media-heading(id='commentUsername' + comment.id) Username
+          p #{comment.text}
+          span.pull-right.text-right.text-muted=comment.date
