@@ -61,10 +61,10 @@ const showCollection = (collection) => {
          * html strings.
          */
         util.cycleObjectProperties(shellStatus, (collectionType) => {
-          count[collectionType] += 1;
           // Display a placeholder and update it once getShell resolves.
           shellData.type = collectionType;
           html[collectionType] += profileCollectionShellThumbnail(shellData);
+          count[collectionType] += 1;
 
           tamagotchiLib.getShell(releaseId, shellId, (shellSnapshot) => {
             const shell = shellSnapshot.val();
