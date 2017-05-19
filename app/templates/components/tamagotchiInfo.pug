@@ -1,0 +1,48 @@
+.row
+  .col-md-12
+    #tamagotchiInfoEmptyState
+      center
+        img.img-responsive(src='/img/emptyStates/turtle.png')
+        p.text-muted
+          strong Select a version on the left to get started.
+    #tamagotchiInfoPanel.panel.panel-default.hidden
+      .panel-body
+        .row
+          .col-md-5
+            .row
+              .col-md-12
+                .thumbnail
+                  img#tamagotchiInfoShellImg(src='/img/sampleShell.jpg')
+            .row
+              #collectionStatus.col-md-12.hidden
+                h4 Collection Status
+                hr
+                include shellCollectionButtons.pug
+
+          .col-md-7
+            #tamagotchiInfoVersionPanel
+              h4 Version Info
+              hr
+              dl.dl-horizontal
+                dt Name:
+                dd#tamagotchiInfoVersionName Tamagotchi m!x
+                dt Description:
+                dd#tamagotchiInfoVersionDescription The Tamagotchi m!x is so named because the focus this time around is on the creation of new character attribute combinations based on the parents. There are four versions: Melody, Spacey, 20th Anniversary, and Sanrio, each with exclusive characters.
+                dt Shorthand:
+                dd#tamagotchiInfoVersionShorthand m!x
+            #tamagotchiInfoReleasePanel.hidden
+              h4 Release Info
+              hr
+              dl.dl-horizontal
+                dt Release Name:
+                dd#tamagotchiInfoReleaseName Anniversary
+                dt Release Date:
+                dd#tamagotchiInfoReleaseDate 20.08.2016
+                dt Price:
+                dd#tamagotchiInfoReleasePrice 4500‎¥
+            #tamagotchiInfoShellPanel.hidden
+              h4 Shell Info
+              hr
+              dl.dl-horizontal
+                dt Color:
+                dd#tamagotchiInfoShellColor Pink

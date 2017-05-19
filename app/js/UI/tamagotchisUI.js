@@ -3,16 +3,18 @@ const auth = require('../auth');
 const tamagotchi = require('../tamagotchi');
 const util = require('../util');
 const collection = require('../collection');
-const comments = require('../comments');
-const userLib = require('../user');
 
 const versionCommentsUI = require('../components/versionCommentsUI');
+const tamagotchiInfoUI = require('../components/tamagotchiInfoUI');
 
 $(() => {
   commonUI.bindEvents();
+  versionCommentsUI.bindEvents();
+  tamagotchiInfoUI.bindEvents();
   bindEvents();
 
   auth.addAuthStateListener(commonUI.authStateListener);
+  auth.addAuthStateListener(tamagotchiInfoUI.authStateListener);
   auth.addAuthStateListener(authStateListener);
 
   auth.registerAuthStateListeners();
@@ -115,8 +117,6 @@ function handleLocationChange() {
       if (shellId && getOldShellId() !== shellId) {
         handleShellChange();
         oldPath[4] = shellId;
-      } else {
-        hideShell();
       }
     }
   }
@@ -150,13 +150,7 @@ function showVersions() {
 }
 
 function showVersion(version) {
-  $('#versionInfoName').html(version.name);
-  $('#versionInfoDescription').html(version.description);
-  $('#versionInfoShorthand').html(version.shorthand);
-
-  $('#versionInfoPanel').toggleClass('hidden', false);
-
-  hideRelease();
+  tamagotchiInfoUI.setVersion(version, getCurrentVersionId());
 }
 
 
@@ -247,17 +241,7 @@ function handleReleaseChange() {
 }
 
 function showRelease(release) {
-  $('#releaseInfoName').html(release.name);
-  $('#releaseInfoDate').html(release.date);
-  $('#releaseInfoPrice').html(release.price);
-
-  $('#releaseInfo').toggleClass('hidden', false);
-  hideShell();
-}
-
-function hideRelease() {
-  $('#releaseInfo').toggleClass('hidden', true);
-  hideShell();
+  tamagotchiInfoUI.setRelease(release, getCurrentReleaseId());
 }
 
 function releaseNavClickHandler(e) {
@@ -327,89 +311,10 @@ function handleShellChange() {
 }
 
 function showShell(shell) {
-  $('#shellImage').attr('src', shell.img);
-  $('#shellInfoColor').html(shell.color);
-  $('#shellInfo').toggleClass('hidden', false);
-
-  // If the user is logged in show the collectionButtons
-  if (firebase.auth().currentUser) {
-    showCollectionStatus();
-    $('#collectionStatus').toggleClass('hidden', false);
-  } else {
-    $('#collectionStatus').toggleClass('hidden', true);
-  }
+  tamagotchiInfoUI.setShell(shell, getCurrentShellId());
 }
-
-function hideShell() {
-  $('#shellInfo').toggleClass('hidden', true);
-  $('#collectionStatus').toggleClass('hidden', true);
-  $('#shellImage').attr('src', '/img/sampleShell.jpg');
-}
-
 
 let userCollection = {};
-
-function addCurrentShellTo(group) {
-  $(`#buttonAddTo${group.toUpperCase()}`).button('loading');
-
-  const versionId = getCurrentVersionId();
-  const releaseId = getCurrentReleaseId();
-  const shellId = getCurrentShellId();
-
-  collection.addTo(group, versionId, releaseId, shellId, () => {
-    $(`#buttonAddTo${group.toUpperCase()}`).button('reset');
-  });
-}
-
-function removeCurrentShellFrom(group) {
-  $(`#buttonRemoveFrom${group.toUpperCase()}`).button('loading');
-
-  const versionId = getCurrentVersionId();
-  const releaseId = getCurrentReleaseId();
-  const shellId = getCurrentShellId();
-
-  collection.removeFrom(group, versionId, releaseId, shellId, () => {
-    $(`#buttonRemoveFrom${group.toUpperCase()}`).button('reset');
-  });
-}
-
-
-function addToCollectionClickHandler(e) {
-  e.preventDefault();
-
-  addCurrentShellTo('collected');
-}
-
-function removeFromCollectionClickHandler(e) {
-  e.preventDefault();
-
-  removeCurrentShellFrom('collected');
-}
-
-function addToWantedClickHandler(e) {
-  e.preventDefault();
-
-  addCurrentShellTo('wanted');
-}
-
-function removeFromWantedClickHandler(e) {
-  e.preventDefault();
-
-  removeCurrentShellFrom('wanted');
-}
-
-function addToFavoriteClickHandler(e) {
-  e.preventDefault();
-
-  addCurrentShellTo('favorite');
-}
-
-function removeFromFavoriteClickHandler(e) {
-  e.preventDefault();
-
-  removeCurrentShellFrom('favorite');
-}
-
 
 function showThumbnailCollectionStatus() {
   const versionId = getCurrentVersionId();
@@ -436,38 +341,6 @@ function showThumbnailCollectionStatus() {
   }
 }
 
-function showCollectionStatus() {
-  const versionId = getCurrentVersionId();
-  const releaseId = getCurrentReleaseId();
-  const shellId = getCurrentShellId();
-
-  if (collection.isItemInCollection(userCollection, versionId, releaseId, shellId)) {
-    $('#buttonAddToCollected').toggleClass('hidden', true);
-    $('#buttonRemoveFromCollected').toggleClass('hidden', false);
-    $('#buttonAddToWanted').toggleClass('hidden', true);
-    $('#buttonRemoveFromWanted').toggleClass('hidden', true);
-  } else {
-    $('#buttonAddToCollected').toggleClass('hidden', false);
-    $('#buttonRemoveFromCollected').toggleClass('hidden', true);
-
-    if (collection.isItemInWanted(userCollection, versionId, releaseId, shellId)) {
-      $('#buttonAddToWanted').toggleClass('hidden', true);
-      $('#buttonRemoveFromWanted').toggleClass('hidden', false);
-    } else {
-      $('#buttonAddToWanted').toggleClass('hidden', false);
-      $('#buttonRemoveFromWanted').toggleClass('hidden', true);
-    }
-  }
-
-  if (collection.isItemInFavorite(userCollection, versionId, releaseId, shellId)) {
-    $('#buttonAddToFavorite').toggleClass('hidden', true);
-    $('#buttonRemoveFromFavorite').toggleClass('hidden', false);
-  } else {
-    $('#buttonAddToFavorite').toggleClass('hidden', false);
-    $('#buttonRemoveFromFavorite').toggleClass('hidden', true);
-  }
-}
-
 function collectionListener(collectionSnapshot) {
   userCollection = collectionSnapshot.val();
   // If the user has no items in his collection set it to an empty object to
@@ -477,7 +350,6 @@ function collectionListener(collectionSnapshot) {
   }
 
   showThumbnailCollectionStatus();
-  showCollectionStatus();
 }
 
 function authStateListener(user) {
@@ -486,19 +358,6 @@ function authStateListener(user) {
   }
 }
 
-function postVersionCommentClick(e) {
-  e.preventDefault();
-
-  const commentText = $('#versionCommentTextarea').val();
-
-  if (commentText !== '') {
-    $('#buttonCommentVersion').button('loading');
-    $('#versionCommentTextarea').val('');
-    comments.postVersionComment(getCurrentVersionId(), commentText, () => {
-      $('#buttonCommentVersion').button('reset');
-    });
-  }
-}
 
 function loadComments() {
   versionCommentsUI.init();
@@ -507,14 +366,6 @@ function loadComments() {
 
 function bindEvents() {
   window.onpopstate = handleLocationChange;
-  $('#buttonAddToCollected').on('click', addToCollectionClickHandler);
-  $('#buttonRemoveFromCollected').on('click', removeFromCollectionClickHandler);
-  $('#buttonAddToWanted').on('click', addToWantedClickHandler);
-  $('#buttonRemoveFromWanted').on('click', removeFromWantedClickHandler);
-  $('#buttonAddToFavorite').on('click', addToFavoriteClickHandler);
-  $('#buttonRemoveFromFavorite').on('click', removeFromFavoriteClickHandler);
-
-  $('#buttonCommentVersion').on('click', postVersionCommentClick);
 
   $('#versionSelect').on('change', changeVersion);
 }

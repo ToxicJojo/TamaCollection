@@ -1,0 +1,23 @@
+form
+  .form-group
+    button#shellCollectionButtonAddToCollected.btn.btn-block.btn-success.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
+      | Add to Collection &nbsp;
+      i.fa.fa-book
+
+    button#shellCollectionButtonRemoveFromCollected.btn.btn-block.btn-danger.hidden.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
+      | Remove from Collection &nbsp;
+      i.fa.fa-cross
+  .form-group
+    button#shellCollectionButtonAddToWanted.btn.btn-block.btn-info.btn-raised
+      | Add to Wanted &nbsp;
+      i.fa.fa-bookmark
+    button#shellCollectionButtonRemoveFromWanted.btn.btn-block.btn-danger.hidden.btn-raised
+      | Remove from Wanted &nbsp;
+      i.fa.fa-bookmark-o
+  .form-group
+    button#shellCollectionButtonAddToFavorite.btn.btn-block.btn-warning.btn-raised
+      | Add to Favorites &nbsp;
+      i.fa.fa-star
+    button#shellCollectionButtonRemoveFromFavorite.btn.btn-block.btn-warning.hidden.btn-raised
+      | Remove from Favorites &nbsp;
+      i.fa.fa-star-o

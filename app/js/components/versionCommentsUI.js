@@ -1,10 +1,12 @@
 const commentsLib = require('../comments');
 const userLib = require('../user');
 const util = require('../util');
+const comments = require('../comments');
 
 const commentCardTemplate = require('../templates/commentCard');
 
 let commentDiv;
+let currentVersionId;
 
 const init = () => {
   $('#versionComments').toggleClass('hidden', false);
@@ -33,7 +35,8 @@ const showComment = (comment) => {
 };
 
 const setVersionId = (versionId) => {
-  commentsLib.listenOnComments(versionId, clearComments, (commentSnapshot) => {
+  currentVersionId = versionId;
+  commentsLib.listenOnComments(currentVersionId, clearComments, (commentSnapshot) => {
     const comment = commentSnapshot.val();
     comment.id = commentSnapshot.key;
     comment.date = new Date(comment.timestamp);
@@ -42,6 +45,24 @@ const setVersionId = (versionId) => {
   });
 };
 
+const postVersionCommentClick = (e) => {
+  e.preventDefault();
+
+  const commentText = $('#versionCommentsTextareaComment').val();
+
+  if (commentText !== '') {
+    $('#versionCommentsButtonPost').button('loading');
+    $('#versionCommentsTextareaComment').val('');
+    comments.postVersionComment(currentVersionId, commentText, () => {
+      $('#versionCommentsButtonPost').button('reset');
+    });
+  }
+};
+
+const bindEvents = () => {
+  $('#versionCommentsButtonPost').on('click', postVersionCommentClick);
+};
 
 exports.init = init;
 exports.setVersionId = setVersionId;
+exports.bindEvents = bindEvents;

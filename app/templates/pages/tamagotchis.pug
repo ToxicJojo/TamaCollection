@@ -26,76 +26,7 @@ block content
 
 
       .col-md-7
-        .row
-          .col-md-12
-            #emptyVersion
-              center
-                img.img-responsive(src='/img/emptyStates/turtle.png')
-                p.text-muted
-                  strong Select a version on the left to get started.
-            #versionInfoPanel.panel.panel-default.hidden
-              .panel-body
-                .row
-                  .col-md-5
-                    .row
-                      .col-md-12
-                        .thumbnail
-                          img#shellImage(src='/img/sampleShell.jpg')
-                    .row
-                      #collectionStatus.col-md-12.hidden
-                        h4 Collection Status
-                        hr
-                        form
-                          .form-group
-                            button#buttonAddToCollected.btn.btn-block.btn-success.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
-                              | Add to Collection &nbsp;
-                              i.fa.fa-book
-
-                            button#buttonRemoveFromCollected.btn.btn-block.btn-danger.hidden.btn-raised(type='button' data-loading-text='<i class="fa fa-spinner fa-spin"></i>')
-                              | Remove from Collection &nbsp;
-                              i.fa.fa-cross
-                          .form-group
-                            button#buttonAddToWanted.btn.btn-block.btn-info.btn-raised
-                              | Add to Wanted &nbsp;
-                              i.fa.fa-bookmark
-                            button#buttonRemoveFromWanted.btn.btn-block.btn-danger.hidden.btn-raised
-                              | Remove from Wanted &nbsp;
-                              i.fa.fa-bookmark-o
-                          .form-group
-                            button#buttonAddToFavorite.btn.btn-block.btn-warning.btn-raised
-                              | Add to Favorites &nbsp;
-                              i.fa.fa-star
-                            button#buttonRemoveFromFavorite.btn.btn-block.btn-warning.hidden.btn-raised
-                              | Remove from Favorites &nbsp;
-                              i.fa.fa-star-o
-
-                  .col-md-7
-                    #versionInfo
-                      h4 Version Info
-                      hr
-                      dl.dl-horizontal
-                        dt Name:
-                        dd#versionInfoName Tamagotchi m!x
-                        dt Description:
-                        dd#versionInfoDescription The Tamagotchi m!x is so named because the focus this time around is on the creation of new character attribute combinations based on the parents. There are four versions: Melody, Spacey, 20th Anniversary, and Sanrio, each with exclusive characters.
-                        dt Shorthand:
-                        dd#versionInfoShorthand m!x
-                    #releaseInfo.hidden
-                      h4 Release Info
-                      hr
-                      dl.dl-horizontal
-                        dt Release Name:
-                        dd#releaseInfoName Anniversary
-                        dt Release Date:
-                        dd#releaseInfoDate 20.08.2016
-                        dt Price:
-                        dd#releaseInfoPrice 4500‎¥
-                    #shellInfo.hidden
-                      h4 Shell Info
-                      hr
-                      dl.dl-horizontal
-                        dt Color:
-                        dd#shellInfoColor Pink
+        include ../components/tamagotchiInfo
                         
         include ../components/versionComments.pug
         
