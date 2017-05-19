@@ -1,11 +1,16 @@
 const gulp = require('gulp');
 const pug = require('gulp-pug');
-const browserify = require('gulp-browserify');
 const uglify = require('gulp-uglify');
-const babel = require('gulp-babel');
 const exec = require('child_process').exec;
 const execSync = require('child_process').execSync;
 const insert = require('gulp-insert');
+const browserify2 = require('browserify');
+const source = require('vinyl-source-stream');
+const glob = require('glob');
+const es = require('event-stream');
+const babelify = require('babelify');
+const buffer = require('vinyl-buffer');
+
 
 gulp.task('pug', () => {
   return gulp.src('app/templates/pages/**/*.pug')
@@ -50,27 +55,36 @@ gulp.task('bootstrap-material', () => {
     .pipe(gulp.dest('public/css/vendor/'));
 });
 
-// Applies browserify, babel and uglifies the results.
-// The resulting files are written to public/js.
-gulp.task('javascript', () => {
-  return gulp.src('app/js/UI/*.js')
-    .pipe(browserify())
-    .pipe(babel({
-      presets: ['es2015'],
-    }))
-    .pipe(uglify())
-    .pipe(gulp.dest('public/js'));
+gulp.task('javascript', (done) => {
+  glob('app/js/UI/*.js', (err, files) => {
+    if (err) done(err);
+
+    const tasks = files.map((entry) => {
+      return browserify2({ entries: [entry] })
+        .transform(babelify)
+        .bundle()
+        .pipe(source(entry))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest('public/js'));
+    });
+    es.merge(tasks).on('end', done);
+  });
 });
 
-// Applies browserify and babel.
-// The resulting files are written to public/js.
-gulp.task('javascript-dev', () => {
-  return gulp.src('app/js/UI/*.js')
-    .pipe(browserify())
-    .pipe(babel({
-      presets: ['es2015'],
-    }))
-    .pipe(gulp.dest('public/js'));
+gulp.task('javascript-dev', (done) => {
+  glob('app/js/UI/*.js', (err, files) => {
+    if (err) done(err);
+
+    const tasks = files.map((entry) => {
+      return browserify2({ entries: [entry] })
+        .transform(babelify)
+        .bundle()
+        .pipe(source(entry))
+        .pipe(gulp.dest('public/js'));
+    });
+    es.merge(tasks).on('end', done);
+  });
 });
 
 
