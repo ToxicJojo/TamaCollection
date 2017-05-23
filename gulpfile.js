@@ -10,7 +10,7 @@ const glob = require('glob');
 const es = require('event-stream');
 const babelify = require('babelify');
 const buffer = require('vinyl-buffer');
-
+const rename = require('gulp-rename');
 
 gulp.task('pug', () => {
   return gulp.src('app/templates/pages/**/*.pug')
@@ -66,6 +66,9 @@ gulp.task('javascript', (done) => {
         .pipe(source(entry))
         .pipe(buffer())
         .pipe(uglify())
+        .pipe(rename({
+          dirname: '',
+        }))
         .pipe(gulp.dest('public/js'));
     });
     es.merge(tasks).on('end', done);
@@ -81,6 +84,9 @@ gulp.task('javascript-dev', (done) => {
         .transform(babelify)
         .bundle()
         .pipe(source(entry))
+        .pipe(rename({
+          dirname: '',
+        }))
         .pipe(gulp.dest('public/js'));
     });
     es.merge(tasks).on('end', done);
