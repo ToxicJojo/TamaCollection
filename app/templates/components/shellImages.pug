@@ -1,0 +1,19 @@
+.row
+  .col-md-12
+    .panel.panel-primary
+      .panel-heading
+        h3.panel-title Shell Images
+      .panel-body
+        ul.nav.nav-pills(role='tablist')
+          li.tab
+            a(href='#') Users
+          li.tab
+            a(href='#') Official
+        #shellImagesUser.row
+        center
+          input#shellImagesInputFile.hidden(type='file' accept='image/jpeg, image/png')
+          button#shellImagesButtonUpload.btn.btn-primary(type='button' data-loading-text='Uploading <i class="fa fa-spinner fa-spin"></i>') Upload Picture
+          
+
+          
+          

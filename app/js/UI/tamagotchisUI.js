@@ -6,11 +6,15 @@ const collection = require('../collection');
 
 const versionCommentsUI = require('../components/versionCommentsUI');
 const tamagotchiInfoUI = require('../components/tamagotchiInfoUI');
+const shellImagesUI = require('../components/shellImagesUI');
 
 $(() => {
+  shellImagesUI.init();
+
   commonUI.bindEvents();
   versionCommentsUI.bindEvents();
   tamagotchiInfoUI.bindEvents();
+  shellImagesUI.bindEvents();
   bindEvents();
 
   auth.addAuthStateListener(commonUI.authStateListener);
@@ -307,6 +311,7 @@ function shellThumbnailClickHandler(e) {
 }
 
 function handleShellChange() {
+  shellImagesUI.setShellId(getCurrentShellId());
   showShell(getCurrentShell());
 }
 
