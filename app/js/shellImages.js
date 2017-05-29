@@ -4,6 +4,10 @@ const listenOnShellImages = (shellId, successCallback) => {
   firebase.database().ref(`/shellImages/${shellId}`).on('value', successCallback);
 };
 
+const removeShellImageListener = (shellId) => {
+  firebase.database().ref(`/shellImages/${shellId}`).off();
+};
+
 const updateShellImage = (shellId, shellImageId, shellImageData) => {
   return firebase.database().ref(`/shellImages/${shellId}/user/${shellImageId}`).update(shellImageData);
 };
@@ -28,5 +32,6 @@ const uploadShellImage = (shellId, file) => {
 };
 
 exports.listenOnShellImages = listenOnShellImages;
+exports.removeShellImageListener = removeShellImageListener;
 exports.updateShellImage = updateShellImage;
 exports.uploadShellImage = uploadShellImage;

@@ -1,34 +1,67 @@
 const shellImages = require('../shellImages');
 const validator = require('../validator');
 const util = require('../util');
+const uiHelper = require('../uiHelper');
 
 const shellImagesThumbnailTemplate = require('../templates/shellImagesThumbnail');
 
 let currentShellId;
+
 let uploadButton;
+let emptyStateDiv;
+let shellImagesRow;
 
 const init = () => {
   uploadButton = $('#shellImagesButtonUpload');
+  emptyStateDiv = $('#shellImagesEmptyState');
+  shellImagesRow = $('#shellImagesRow');
+};
+
+const showEmptyState = () => {
+  emptyStateDiv.toggleClass('hidden', false);
+};
+
+const hideEmptyState = () => {
+  emptyStateDiv.toggleClass('hidden', true);
+};
+
+const hide = () => {
+  shellImagesRow.toggleClass('hidden', true);
 };
 
 const showImages = (shellImagesSnapshot) => {
+  shellImagesRow.toggleClass('hidden', false);
   const images = shellImagesSnapshot.val();
 
   const shellImagesUser = $('#shellImagesUser');
   shellImagesUser.html('');
 
-  util.cycleObjectProperties(images.user, (imageId, imageData) => {
-    const templateData = {
-      imageId,
-      imageData,
-    };
+  if (images) {
+    hideEmptyState();
 
-    shellImagesUser.append(shellImagesThumbnailTemplate(templateData));
-    console.log(templateData);
-  });
+    util.cycleObjectProperties(images.user, (imageId, imageData) => {
+      const templateData = {
+        imageId,
+        imageData,
+      };
+
+      shellImagesUser.append(shellImagesThumbnailTemplate(templateData));
+    });
+  } else {
+    showEmptyState();
+  }
+
+  uiHelper.hideLoadingSpinner('#shellImagesPanelBody');
 };
 
 const setShellId = (shellId) => {
+  // If we already were listening for changes on a shell we need to remove that listener
+  if (currentShellId) {
+    shellImages.removeShellImageListener(currentShellId);
+  }
+
+  uiHelper.showLoadingSpinner('#shellImagesPanelBody');
+
   currentShellId = shellId;
   shellImages.listenOnShellImages(currentShellId, showImages);
 };
@@ -63,5 +96,6 @@ const bindEvents = () => {
 };
 
 exports.init = init;
+exports.hide = hide;
 exports.setShellId = setShellId;
 exports.bindEvents = bindEvents;

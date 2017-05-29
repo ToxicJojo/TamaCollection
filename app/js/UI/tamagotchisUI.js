@@ -178,6 +178,8 @@ function handleVersionChange() {
   $('#emptyShells').toggleClass('hidden', true);
   $('#emptyVersion').toggleClass('hidden', true);
 
+  shellImagesUI.hide();
+
   showVersion(getCurrentVersion());
   loadReleases(versionId);
   loadComments();
@@ -239,6 +241,8 @@ function handleReleaseChange() {
   $(`#releaseContent${releaseId}`).toggleClass('hidden', false);
 
   $('#emptyShells').toggleClass('hidden', true);
+
+  shellImagesUI.hide();
 
   showRelease(getCurrentRelease());
   loadShells(getCurrentReleaseId());
@@ -312,11 +316,7 @@ function shellThumbnailClickHandler(e) {
 
 function handleShellChange() {
   shellImagesUI.setShellId(getCurrentShellId());
-  showShell(getCurrentShell());
-}
-
-function showShell(shell) {
-  tamagotchiInfoUI.setShell(shell, getCurrentShellId());
+  tamagotchiInfoUI.setShell(getCurrentShell(), getCurrentShellId());
 }
 
 let userCollection = {};

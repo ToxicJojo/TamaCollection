@@ -1,16 +1,18 @@
-.row
+#shellImagesRow.row.hidden
   .col-md-12
     .panel.panel-primary
       .panel-heading
         h3.panel-title Shell Images
-      .panel-body
-        ul.nav.nav-pills(role='tablist')
-          li.tab
-            a(href='#') Users
-          li.tab
-            a(href='#') Official
+      .panel-body#shellImagesPanelBody
         #shellImagesUser.row
         center
+          #shellImagesEmptyState.hidden
+            center
+              img.img-responsive(src='/img/emptyStates/noUserPictures.png')
+              p.text-muted
+                strong There are no user uploaded images for this shell.
+              p.text-muted
+                strong Be the first one!
           input#shellImagesInputFile.hidden(type='file' accept='image/jpeg, image/png')
           button#shellImagesButtonUpload.btn.btn-primary(type='button' data-loading-text='Uploading <i class="fa fa-spinner fa-spin"></i>') Upload Picture
           
