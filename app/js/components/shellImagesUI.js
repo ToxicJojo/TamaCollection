@@ -1,20 +1,25 @@
 const shellImages = require('../shellImages');
 const validator = require('../validator');
+const userLib = require('../user');
 const util = require('../util');
 const uiHelper = require('../uiHelper');
 
 const shellImagesThumbnailTemplate = require('../templates/shellImagesThumbnail');
 
 let currentShellId;
+let currentShellImages;
 
 let uploadButton;
 let emptyStateDiv;
 let shellImagesRow;
+let shellImagesModal;
+
 
 const init = () => {
   uploadButton = $('#shellImagesButtonUpload');
   emptyStateDiv = $('#shellImagesEmptyState');
   shellImagesRow = $('#shellImagesRow');
+  shellImagesModal = $('#shellImagesModal');
 };
 
 const showEmptyState = () => {
@@ -29,17 +34,33 @@ const hide = () => {
   shellImagesRow.toggleClass('hidden', true);
 };
 
+const showImageModal = (e) => {
+  const imageId = $(e.currentTarget).data().imageId;
+  const shellImage = currentShellImages.user[imageId];
+
+  $('#shellImagesModalImage').attr('src', shellImage.img);
+
+  userLib.getUser(shellImage.uploader, (userSnapshot) => {
+    const user = userSnapshot.val();
+
+    $('#shellImagesModalUploader').text(user.username);
+    $('#shellImagesModalUploader').attr('href', `/profile/${user.username}`);
+  });
+
+  shellImagesModal.modal({ backdrop: true });
+};
+
 const showImages = (shellImagesSnapshot) => {
   shellImagesRow.toggleClass('hidden', false);
-  const images = shellImagesSnapshot.val();
+  currentShellImages = shellImagesSnapshot.val();
 
   const shellImagesUser = $('#shellImagesUser');
   shellImagesUser.html('');
 
-  if (images) {
+  if (currentShellImages) {
     hideEmptyState();
 
-    util.cycleObjectProperties(images.user, (imageId, imageData) => {
+    util.cycleObjectProperties(currentShellImages.user, (imageId, imageData) => {
       const templateData = {
         imageId,
         imageData,
@@ -47,6 +68,8 @@ const showImages = (shellImagesSnapshot) => {
 
       shellImagesUser.append(shellImagesThumbnailTemplate(templateData));
     });
+
+    $('.shellImages').on('click', showImageModal);
   } else {
     showEmptyState();
   }

@@ -1,3 +1,15 @@
+#shellImagesModal.modal.fade(tabindex='-1', role='dialog')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') &times;
+        h4.modal-title Uploader:
+          a#shellImagesModalUploader
+      .modal-body
+        img#shellImagesModalImage.img-responsive
+        
+
 #shellImagesRow.row.hidden
   .col-md-12
     .panel.panel-primary
