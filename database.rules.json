@@ -31,8 +31,8 @@
       ".write": "root.child('admins').child(auth.uid).exists()"
     },
     "collections":  {
-      ".read": true,
         "$uid": {
+          ".read": "auth.uid == $uid || root.child('users').child($uid).child('privateCollection').val() == false",
           ".write": "auth.uid === $uid"
         }
     },
@@ -40,6 +40,16 @@
       "$cid": {
         ".read": true,
         ".write": "newData.child('owner').val() === auth.uid"
+      }
+    },
+    "shellImages": {
+      "$sid": {
+        ".read": true,
+        "user": {
+        	"$imageId": {
+        		".write": "auth.uid == newData.child('uploader').val()"
+      			}
+      		}
       }
     }
   }
