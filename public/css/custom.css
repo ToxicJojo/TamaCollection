@@ -6,6 +6,10 @@
   color: #009688;
 }
 
+.row.social {
+  text-align: center;
+}
+
 .btn.btn-fab, .btn.btn-fab.btn-default.btn-facebook {
  background-color: #3b5998;
 }

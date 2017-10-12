@@ -14,7 +14,7 @@ function createNewAccount(username, email, password, errorCallback) {
       const userData = {
         username,
         privateCollection: false,
-      }
+      };
       // Save the username in /users/$UID/username
       updates[`/users/${user.uid}`] = userData;
 
