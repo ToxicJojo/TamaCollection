@@ -7,7 +7,7 @@
     "cleanUrls": true,
     "rewrites": [ {
       "source": "/tamagotchis/**",
-      "destination": "/tamagotchis.html"
+      "destination": "/index.html"
       }, {
       "source": "/profile/**",
       "destination": "/profile.html"
